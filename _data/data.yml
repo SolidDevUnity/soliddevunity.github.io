@@ -7,196 +7,203 @@ sidebar:
     education: True # set to False if you want education in main section instead of in sidebar
 
     # Profile information
-    name: Alan Doe
-    tagline: Full Stack Developer
-    avatar: profile.png  #place a 100x100 picture inside /assets/images/ folder and provide the name of the file below
+    name: David Agito
+    tagline: Unity Developer
+    avatar: profile-pic.png  #place a 100x100 picture inside /assets/images/ folder and provide the name of the file below
 
     # Sidebar links
-    email: hello@webjeda.com
-    phone: 012 345 6789
-    timezone: America/Cancun Timezone
-    citizenship:
-    website: blog.webjeda.com #do not add http://
-    linkedin: alandoe
-    xing: alandoe
-    github: sharu725
-    telegram: # add your nickname without '@' sign
-    gitlab:
-    bitbucket:
-    twitter: '@webjeda'
-    stack-overflow: # Number/Username, e.g. 123456/alandoe
-    codewars:
-    goodreads: # Number-Username, e.g. 123456-alandoe
-    pdf: http://www.africau.edu/images/default/sample.pdf
+    email: davidagito8@gmail.com
+    # phone: 012 345 6789
+    # timezone: America/Cancun Timezone
+    # citizenship: Philippines
+    # website: blog.webjeda.com #do not add http://
+    # linkedin: alandoe
+    # xing: alandoe
+    github: soliddevunity
+    # telegram: # add your nickname without '@' sign
+    # gitlab:
+    # bitbucket:
+    # twitter: '@webjeda'
+    # stack-overflow: # Number/Username, e.g. 123456/alandoe
+    # codewars:
+    # goodreads: # Number-Username, e.g. 123456-alandoe
+    # pdf: http://www.africau.edu/images/default/sample.pdf
 
     languages:
       title: Languages
       info:
         - idiom: English
+          level: Professional
+
+        - idiom: Tagalog
           level: Native
-
-        - idiom: French
-          level: Professional
-
-        - idiom: Spanish
-          level: Professional
 
     interests:
       title: Interests
       info:
-        - item: Climbing
+        - item: Music - Guitar
           link:
 
-        - item: Snowboarding
+        - item: Games - Sekiro, Naraka, Witcher
           link:
 
-        - item: Cooking
+        - item: Movies
+          link:
+
+        - item: Series
           link:
 
 career-profile:
     title: Career Profile
     summary: |
-      Summarise your career here lorem ipsum dolor sit amet, consectetuer
-      adipiscing elit. You can [download this free resume/CV template here]().
-      Aenean commodo ligula eget dolor aenean massa. Cum sociis natoque
-      penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-      Donec quam felis, ultricies nec, pellentesque eu.
-      Second paragraph if required.
+      Knowledgeable professional with a background in game development using Unity3D.
+      A developer with passion in game development. Values good game aesthetics, gameplay,
+      and quality.
+      Creates flexible, and human readable code. Follows existing architecture thoroughly or,
+      establishes an easy to follow architecture with MVC.
+
 education:
     title: Education
     info:
-      - degree: MSc in Computer Science
-        university: University of London
-        time: 2011 - 2012
-        details: |
-          Describe your study here lorem ipsum dolor sit amet, consectetuer
-          adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum
-          sociis natoque penatibus et magnis dis parturient montes, nascetur
-          ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu,
-          pretium quis, sem.
-            - Bullet point
-            - Bullet point
-      - degree: BSc in Applied Mathematics
-        university: Bristol University
-        time: 2007 - 2011
-        details: |
-          Describe your study here lorem ipsum dolor sit amet, consectetuer
-          adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum
-          sociis natoque penatibus et magnis dis parturient montes, nascetur
-          ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu,
-          pretium quis, sem.
-            - Bullet point
-            - Bullet point
+      - degree: BS in Electronics Engineering
+        university: Mapua University
+        time: 2010 - 2016
 experiences:
     title: Experiences
     info:
-      - role: Lead Developer
-        time: 2015 - Present
-        company: Startup Hubs, San Francisco
+      - role: Unity Game Developer
+        time: 2021 - Present
+        company: Peach Pop Games, Remote
         details: |
-          Describe your role here lorem ipsum dolor sit amet, consectetuer
-          adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.
-          Cum sociis natoque penatibus et magnis dis parturient montes,
-          nascetur ridiculus mus. Donec quam felis, ultricies nec,
-          pellentesque eu, pretium quis, sem. Nulla consequat massa quis
-          enim. Donec pede justo. Sed ut perspiciatis unde omnis iste natus
-          error sit voluptatem accusantium doloremque laudantium, totam rem
-          aperiam, eaque ipsa quae ab illo inventore veritatis et quasi
-          architecto beatae vitae dicta sunt explicabo.
-            - Bullet point
-            - Bullet point
+          Currently working for a startup company working on a Rouge-lite Deckbuilder game for PC.
       - role: Senior Software Engineer
-        time: 2014 - 2015
-        company: Google, London
+        time: 2020 - 2021
+        company: Sprobe, Remote
         details: |
-          Describe your role here lorem ipsum dolor sit amet, consectetuer
-          adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.
-          Cum sociis natoque penatibus et magnis dis parturient montes,
-          nascetur ridiculus mus. Donec quam felis, ultricies nec,
-          pellentesque eu, pretium quis, sem.
-            - Bullet point
-            - Bullet point
-      - role: UI Developer
-        time: 2012 - 2014
-        company: Amazon, London
+          Worked as senior software engineer, however my skills are specialized with Game Development using 
+          Unity3D. Work with team or solo working on client game projects (mostly hypercasual).
+      - role: Unity Game Developer
+        time: 2019 - 2020
+        company: PlayX, Remote
         details: |
-          Describe your role here lorem ipsum dolor sit amet, consectetuer
-          adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.
-          Cum sociis natoque penatibus et magnis dis parturient montes,
-          nascetur ridiculus mus. Donec quam felis, ultricies nec,
-          pellentesque eu, pretium quis, sem.
-            - Bullet point
-            - Bullet point
-projects:
-    title: Projects
+          I worked as a full time game developer that focuses on casual games for mobile. Focused on delivering 
+          quick prototypes, and flexible code for rapid changes. Worked on making mobile builds for Android and IOS.
+      - role: Unity Game Developer
+        time: 2018 - 2019
+        company: 3w Global Corp., Remote
+        details: |
+           I’ve worked as a full time game developer that provides the required development tasks by the
+           company. Working on games that are to be updated, and optimized. Occasionally used Adobe Illustrator 
+           and Photoshop to create basic 2D game assets.
+      - role: Software Engineer
+        time: 2017 - 2018
+        company: Accenture, Metro Manila
+        details: |
+          Rapidly prototyped new data processing capabilities to confirm integration feasibility into existing
+          systems. Worked closely with software development and testing team members to design and develop robust
+          API Integration solutions to meet client requirements for functionality, scalability and performance.
+
+projectsmobile:
+    title: PROJECTS (Mobile)
     intro: >
-      You can list your side projects or open source libraries in this
-      section. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-      Vestibulum et ligula in nunc bibendum fringilla a eu lectus.
+      Below are some of the projects I've worked on where the target platform is mobile.
+      I've been able to release mobile games to android playstore and ios appstore.
     assignments:
-      - title: Velocity
-        link: "#hook"
-        tagline: "A responsive website template designed to help startups promote, market and sell their products."
 
-      - title: DevStudio
-        link: "#"
-        tagline: "A responsive website template designed to help web developers/designers market their services."
+        # Mobile
 
-      - title: Tempo
-        link: "#"
-        tagline: "A responsive website template designed to help startups promote their products or services and to attract users &amp; investors"
+      - title: Bounce It!
+        link: "https://www.youtube.com/watch?v=TbyUfLzTHtQ"
+        tagline: "Worked with a brilliant game designer and artist to build this beautiful casual game on mobile"
+        gif: bounce-it.gif
 
-      - title: Atom
-        link: "#"
-        tagline: "A comprehensive website template solution for startups/developers to market their mobile apps."
+      - title: Make Me Fraud
+        link: "https://www.youtube.com/watch?v=rbwLe01b1kc"
+        tagline: "A disguise game where you change the looks of your client so they can get through security. This game was able to pass CTR test and was eventually released on the appstore."
+        gif: make-me-fraud.gif
 
-      - title: Delta
-        link: "#"
+      - title: Slow mo ninja stars
+        link: "https://www.youtube.com/watch?v=Y_2Y0xSQsDY"
+        tagline: "Worked with a brilliant game designer and artist to build this beautiful casual game on mobile"
+        gif: slow-mo-ninja-stars.gif
+
+      - title: Jigsaw Puzzle
+        link: "https://youtu.be/6Z90rSI9EE0"
+        tagline: "Worked on this casual mobile game for a japanese client. The game is designed to be relaxing to play."
+        gif: jigsawpuzzle.gif
+
+      - title: Hamster Biter
+        link: "https://youtu.be/9FNofIshLzQ"
+        tagline: "A cute casual mobile game where you dress up your hamster and help them eat."
+        gif: hamster-biter.gif
+
+      - title: Zoo Life
+        link: "https://youtube.com/shorts/pwsGAWV_Qj8"
+        tagline: "An idle casual game inspired by cats and soup. Animals can collect resources and build buildings inorder to rebuild the destroyed zoo."
+        gif: zoo-life.gif
+
+      - title: Cocktails Please!
+        link: "https://youtu.be/NApFyy0vCAI"
+        tagline: "A prototype of a water sorting puzzle game where you transfer the contents from glass to glass to match the colors. URP Shader Graph was used to make the pouring effect."
+        gif: water-sort.gif
+
+      - title: Surfing Master
+        link: "https://youtu.be/fH2SY_2t3zo"
+        tagline: "A funny 3D posing game inspired by Couples Yoga. You arrange the limbs of the surfer midair to achieve the correct poses."
+        gif: surfing-master.gif
+
+projectspc:
+    title: PROJECTS (PC)
+    intro: >
+      Below are some of the projects I've worked on where the target platform is PC.
+    assignments:
+
+        # PC
+
+      - title: Car Chase Simulator
+        link: "https://www.youtube.com/watch?v=wXjvM7bzWuQ"
         tagline: "A responsive Bootstrap one page theme designed to help app developers promote their mobile apps"
+        gif: racinggame.gif
 
-publications:
-    title: Publications
-    intro: |
-      You can list your publications in this section. Lorem ipsum dolor sit
-      amet, consectetur adipiscing elit. Vestibulum et ligula in nunc
-      bibendum fringilla a eu lectus.
-    papers:
-      - title: The Art of Computer Programming
-        link: "#"
-        authors: Donald E. Knuth
-        conference: Addison-Wesley, 1968
+      - title: Beer Brewing Game
+        link: "https://youtu.be/9NQyhB_VsJo"
+        tagline: "A prototype"
+        gif: beer-brewing.gif
 
-      - title: "Genetic Programming III: Darwinian Invention &amp; Problem Solving"
-        link: "#"
-        authors: Koza, J.R., Andre, D., Bennett, F.H., Keane, M.A.
-        conference: "Morgan Kaufmann Publishers Inc., San Francisco, CA, USA, 1st edn. (1999)"
+projectstools:
+    title: PROJECTS (Tools)
+    intro: >
+      Below are tools I've worked on to aid in creation of levels or assets on games that me or my team is working on.
+    assignments:
 
-      - title: A syntax directed compiler for Algol 60
-        link: "#"
-        authors: Edgar T. Irons
-        conference: "Comm. ACM 4 (1961), 51–55"
+        # Tools
+
+      - title: Hex World Creator / Editor
+        link: "https://youtu.be/uuX-5VeZEKI"
+        tagline: "It's a world editor I've made with hex blocks for a game we've been working on which is somewhat similar to the android game My Little Universe. The map data is saved as a JSON file so it's easy to retrieve game progress. Since the game is meant to have the map be built and unlocked by the player overtime."
+        gif: hex-world-editor.gif
 
 skills:
     title: Skills &amp; Proficiency
 
     toolset:
-      - name: Python & Django
-        level: 98%
-
-      - name: Javascript & jQuery
-        level: 98%
-
-      - name: Angular
-        level: 98%
-
-      - name: HTML5 & CSS
+      - name: Unity3D General
         level: 95%
 
-      - name: Ruby on Rails
+      - name: UI Animations / Tweening
+        level: 95%
+
+      - name: Unity3D Mobile
+        level: 90%
+
+      - name: Unity3D PC
         level: 85%
 
-      - name: Sketch & Photoshop
-        level: 60%
+      - name: 2D Game Development
+        level: 85%
+
+      - name: 3D Game Development
+        level: 75%
 
 footer: >
     Designed with <i class="fas fa-heart"></i> by <a href="http://themes.3rdwavemedia.com" target="_blank" rel="nofollow">Xiaoying Riley</a>
