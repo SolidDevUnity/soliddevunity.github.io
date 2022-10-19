@@ -44,7 +44,7 @@ sidebar:
         - item: Guitar playing
           link:
 
-        - item: Music - RNB, Metal, Rap
+        - item: Music - R&B
           link:
 
         - item: Games - Sekiro, Helldivers, Crab Game
@@ -182,6 +182,11 @@ projectstools:
         link: "https://youtu.be/uuX-5VeZEKI"
         tagline: "It's a world editor I've made with hex blocks for a game we've been working on which is somewhat similar to the android game My Little Universe. The map data is saved as a JSON file so it's easy to retrieve game progress. Since the game is meant to have the map be built and unlocked by the player overtime."
         gif: hex-world-editor.gif
+
+      - title: Sample Code (UI Test)
+        link: "https://github.com/SolidDevUnity/UITest.git"
+        tagline: "This is a UI test exam I've worked on using only native Unity features. The requirements for the exam is added on the readme of this github link page. This is to showcase how I do my code and the architecture I follow. Probably not perfect but I'll be updating this repo overtime as I learn more."
+        gif: ui-test.gif
 
 skills:
     title: Skills &amp; Proficiency
