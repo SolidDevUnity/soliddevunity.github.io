@@ -152,6 +152,12 @@ projectsmobile:
         tagline: "A funny 3D posing game inspired by Couples Yoga. You arrange the limbs of the surfer midair to achieve the correct poses."
         gif: surfing-master.gif
 
+      - title: Slay the Spire-like Game
+        tagline: "Currently under NDA - Cannot provide details at this time."
+
+      - title: Animal Breeding Game
+        tagline: "Currently under NDA - Cannot provide details at this time."
+
 projectspc:
     title: PROJECTS (PC)
     intro: >
