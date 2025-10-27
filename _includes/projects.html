@@ -13,35 +13,51 @@
   {% if projectsmobile.intro %}
   <div class="intro">
       <p>{{ projectsmobile.intro }}</p>
-      <br/>
   </div><!--//intro-->
   {% endif %}
 
-  {% for project in projectsmobile.assignments %}
-    <div class="item">
-
-      <span class="project-title">
-        {% if project.link %}
-        <a href="{{ project.link }}" target="_blank">{{ project.title }}</a>
-        {% else %}
-        {{ project.title }}
+  <div class="projects-container">
+    {% for project in projectsmobile.assignments %}
+      <div class="project-card">
+        {% if project.gif %}
+        <div class="project-image-wrapper">
+          {% if project.link %}
+            <a href="{{ project.link }}" target="_blank" class="project-image-link">
+              <img class="project-image" src="{{site.baseurl}}/assets/gifs/{{project.gif}}" alt="{{ project.title }}"/>
+              <div class="project-overlay">
+                <i class="fas fa-external-link-alt"></i>
+                <span>View Project</span>
+              </div>
+            </a>
+          {% else %}
+            <img class="project-image" src="{{site.baseurl}}/assets/gifs/{{project.gif}}" alt="{{ project.title }}"/>
+          {% endif %}
+        </div>
         {% endif %}
-      </span>
-
-      {% if project.tagline %}
-      - <span class="project-tagline">{{ project.tagline }}</span>
-      {% endif %}
-
-      {% if project.gif %}
-      <br/>
-      <br/>
-        <image class="gifs" src="{{site.baseurl}}/assets/gifs/{{project.gif}}" alt="projectgif"/>
-      <br/>
-      <br/>
-      {% endif %}
-
-    </div><!--//item-->
-  {% endfor %}
+        
+        <div class="project-content">
+          <h3 class="project-title">
+            {% if project.link %}
+            <a href="{{ project.link }}" target="_blank">{{ project.title }}</a>
+            {% else %}
+            {{ project.title }}
+            {% endif %}
+          </h3>
+          
+          {% if project.tagline %}
+          <p class="project-tagline">{{ project.tagline }}</p>
+          {% endif %}
+          
+          {% if project.link %}
+          <a href="{{ project.link }}" target="_blank" class="project-link-btn">
+            <i class="fas fa-external-link-alt"></i>
+            View Project
+          </a>
+          {% endif %}
+        </div>
+      </div><!--//project-card-->
+    {% endfor %}
+  </div>
 
 </section><!--//section-->
 {% endif %}
@@ -61,35 +77,51 @@
   {% if projectspc.intro %}
   <div class="intro">
       <p>{{ projectspc.intro }}</p>
-      <br/>
   </div><!--//intro-->
   {% endif %}
 
-  {% for project in projectspc.assignments %}
-    <div class="item">
-
-      <span class="project-title">
-        {% if project.link %}
-        <a href="{{ project.link }}" target="_blank">{{ project.title }}</a>
-        {% else %}
-        {{ project.title }}
+  <div class="projects-container">
+    {% for project in projectspc.assignments %}
+      <div class="project-card">
+        {% if project.gif %}
+        <div class="project-image-wrapper">
+          {% if project.link %}
+            <a href="{{ project.link }}" target="_blank" class="project-image-link">
+              <img class="project-image" src="{{site.baseurl}}/assets/gifs/{{project.gif}}" alt="{{ project.title }}"/>
+              <div class="project-overlay">
+                <i class="fas fa-external-link-alt"></i>
+                <span>View Project</span>
+              </div>
+            </a>
+          {% else %}
+            <img class="project-image" src="{{site.baseurl}}/assets/gifs/{{project.gif}}" alt="{{ project.title }}"/>
+          {% endif %}
+        </div>
         {% endif %}
-      </span>
-
-      {% if project.tagline %}
-      - <span class="project-tagline">{{ project.tagline }}</span>
-      {% endif %}
-
-      {% if project.gif %}
-      <br/>
-      <br/>
-        <image class="gifs" src="{{site.baseurl}}/assets/gifs/{{project.gif}}" alt="projectgif"/>
-      <br/>
-      <br/>
-      {% endif %}
-
-    </div><!--//item-->
-  {% endfor %}
+        
+        <div class="project-content">
+          <h3 class="project-title">
+            {% if project.link %}
+            <a href="{{ project.link }}" target="_blank">{{ project.title }}</a>
+            {% else %}
+            {{ project.title }}
+            {% endif %}
+          </h3>
+          
+          {% if project.tagline %}
+          <p class="project-tagline">{{ project.tagline }}</p>
+          {% endif %}
+          
+          {% if project.link %}
+          <a href="{{ project.link }}" target="_blank" class="project-link-btn">
+            <i class="fas fa-external-link-alt"></i>
+            View Project
+          </a>
+          {% endif %}
+        </div>
+      </div><!--//project-card-->
+    {% endfor %}
+  </div>
 
 </section><!--//section-->
 {% endif %}
@@ -109,35 +141,51 @@
   {% if projectstools.intro %}
   <div class="intro">
       <p>{{ projectstools.intro }}</p>
-      <br/>
   </div><!--//intro-->
   {% endif %}
 
-  {% for project in projectstools.assignments %}
-    <div class="item">
-
-      <span class="project-title">
-        {% if project.link %}
-        <a href="{{ project.link }}" target="_blank">{{ project.title }}</a>
-        {% else %}
-        {{ project.title }}
+  <div class="projects-container">
+    {% for project in projectstools.assignments %}
+      <div class="project-card">
+        {% if project.gif %}
+        <div class="project-image-wrapper">
+          {% if project.link %}
+            <a href="{{ project.link }}" target="_blank" class="project-image-link">
+              <img class="project-image" src="{{site.baseurl}}/assets/gifs/{{project.gif}}" alt="{{ project.title }}"/>
+              <div class="project-overlay">
+                <i class="fas fa-external-link-alt"></i>
+                <span>View Project</span>
+              </div>
+            </a>
+          {% else %}
+            <img class="project-image" src="{{site.baseurl}}/assets/gifs/{{project.gif}}" alt="{{ project.title }}"/>
+          {% endif %}
+        </div>
         {% endif %}
-      </span>
-
-      {% if project.tagline %}
-      - <span class="project-tagline">{{ project.tagline }}</span>
-      {% endif %}
-
-      {% if project.gif %}
-      <br/>
-      <br/>
-        <image class="gifs" src="{{site.baseurl}}/assets/gifs/{{project.gif}}" alt="projectgif"/>
-      <br/>
-      <br/>
-      {% endif %}
-
-    </div><!--//item-->
-  {% endfor %}
+        
+        <div class="project-content">
+          <h3 class="project-title">
+            {% if project.link %}
+            <a href="{{ project.link }}" target="_blank">{{ project.title }}</a>
+            {% else %}
+            {{ project.title }}
+            {% endif %}
+          </h3>
+          
+          {% if project.tagline %}
+          <p class="project-tagline">{{ project.tagline }}</p>
+          {% endif %}
+          
+          {% if project.link %}
+          <a href="{{ project.link }}" target="_blank" class="project-link-btn">
+            <i class="fas fa-external-link-alt"></i>
+            View Project
+          </a>
+          {% endif %}
+        </div>
+      </div><!--//project-card-->
+    {% endfor %}
+  </div>
 
 </section><!--//section-->
 {% endif %}
