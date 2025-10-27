@@ -48,90 +48,222 @@ p {
   order: 2;
   background: $theme-color;
   color: #fff;
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.2), transparent);
+  }
+  
   a {
     color: #fff;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      color: rgba(255, 255, 255, 0.9);
+      transform: translateX(3px);
+    }
   }
+  
   .profile-container {
-    padding: 30px;
-    //background: darken($theme-color, 10%);
-    background: rgba(0, 0, 0, 0.2);
+    padding: 50px 30px 40px;
+    background: rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(10px);
     text-align: center;
     color: #fff;
+    position: relative;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 2px;
+    }
   }
+  
   .name {
     font-size: 32px;
     font-weight: 900;
     margin-top: 0;
     margin-bottom: 10px;
+    letter-spacing: 0.5px;
+    background: linear-gradient(to bottom, #fff, rgba(255, 255, 255, 0.8));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
+  
   .tagline {
-    color: rgba(256, 256, 256, 0.6);
+    color: rgba(256, 256, 256, 0.85);
     font-size: 16px;
     font-weight: 400;
     margin-top: 0;
     margin-bottom: 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 13px;
   }
+  
   .profile {
     margin-bottom: 15px;
   }
 
   .avatar {
-    //used for profile image
-    max-width: 100px;
-    margin-bottom: 15px;
-    border: 0px solid #fff;
+    max-width: 120px;
+    margin-bottom: 20px;
+    border: 4px solid rgba(255, 255, 255, 0.3);
     border-radius: 100%;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3),
+                0 0 0 8px rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4),
+                  0 0 0 8px rgba(255, 255, 255, 0.15);
+    }
   }
   .contact-list {
     .fas,
     .fab,
     .far {
-      margin-right: 5px;
-      font-size: 18px;
+      margin-right: 12px;
+      font-size: 20px;
       vertical-align: middle;
+      width: 24px;
+      text-align: center;
+      opacity: 0.9;
+      transition: all 0.3s ease;
     }
+    
     li {
-      margin-bottom: 15px;
+      margin-bottom: 18px;
+      padding: 10px 15px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      transition: all 0.3s ease;
+      border-left: 3px solid transparent;
+      
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-left-color: rgba(255, 255, 255, 0.4);
+        transform: translateX(5px);
+        
+        i {
+          opacity: 1;
+          transform: scale(1.1);
+        }
+      }
+      
+      a {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+      }
+      
       &:last-child {
         margin-bottom: 0;
       }
     }
   }
+  
   .container-block {
-    padding: 30px;
+    padding: 25px 30px;
+    background: rgba(0, 0, 0, 0.05);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    
+    &:first-of-type {
+      border-top: none;
+    }
+    
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    &:hover::before {
+      opacity: 1;
+    }
   }
+  
   .container-block-title {
     text-transform: uppercase;
-    font-size: 16px;
-    font-weight: 700;
+    font-size: 13px;
+    font-weight: 600;
     margin-top: 0;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.7);
+    position: relative;
+    padding-bottom: 10px;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 30px;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.4);
+      border-radius: 2px;
+    }
   }
   .degree {
     font-size: 14px;
     margin-top: 0;
     margin-bottom: 5px;
   }
+  
   .education-container {
     .item {
       margin-bottom: 15px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.3s ease;
+      
+      &:hover {
+        padding-left: 8px;
+      }
+      
       &:last-child {
         margin-bottom: 0;
+        border-bottom: none;
       }
     }
+    
     .meta {
-      color: rgba(256, 256, 256, 0.6);
-      font-weight: 500;
-      margin-bottom: 0px;
+      color: rgba(256, 256, 256, 0.8);
+      font-weight: 600;
+      margin-bottom: 5px;
       margin-top: 0;
     }
+    
     .time {
-      color: rgba(256, 256, 256, 0.6);
-      font-weight: 500;
+      color: rgba(256, 256, 256, 0.5);
+      font-weight: 400;
       margin-bottom: 0px;
+      font-size: 13px;
     }
   }
+  
   .languages-container {
     .lang-desc {
       color: rgba(256, 256, 256, 0.6);
@@ -140,8 +272,19 @@ p {
 
   .languages-list {
     margin-bottom: 0;
+    
     li {
-      margin-bottom: 10px;
+      margin-bottom: 12px;
+      padding: 8px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.3s ease;
+      
+      &:hover {
+        padding-left: 8px;
+      }
+      
       &:last-child {
         margin-bottom: 0;
       }
@@ -150,10 +293,24 @@ p {
 
   .interests-list {
     margin-bottom: 0;
+    
     li {
       margin-bottom: 10px;
-      &:last-child {
-        margin-bottom: 0;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      display: inline-block;
+      margin-right: 8px;
+      transition: all 0.3s ease;
+      font-size: 13px;
+      
+      &:hover {
+        background: rgba(255, 255, 255, 0.12);
+        transform: translateY(-2px);
+      }
+      
+      a {
+        text-decoration: none;
       }
     }
   }
