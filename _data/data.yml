@@ -44,10 +44,10 @@ sidebar:
         - item: Guitar playing
           link:
 
-        - item: Music - R&B
+        - item: Music
           link:
 
-        - item: Games - Sekiro, Helldivers, Crab Game
+        - item: Playing many games to try them out
           link:
 
         - item: Movies, Anime, TV Series
@@ -198,23 +198,11 @@ skills:
     title: Skills &amp; Proficiency
 
     toolset:
-      - name: Unity3D General
+      - name: Unity3D
         level: 95%
 
-      - name: UI Animations / Tweening
-        level: 95%
-
-      - name: Unity3D Mobile
-        level: 90%
-
-      - name: Unity3D PC
-        level: 85%
-
-      - name: 2D Game Development
-        level: 85%
-
-      - name: 3D Game Development
-        level: 75%
+      - name: Phaser.js
+        level: 80%
 
 footer: >
     Designed with <i class="fas fa-heart"></i> by <a href="http://themes.3rdwavemedia.com" target="_blank" rel="nofollow">Xiaoying Riley</a>
