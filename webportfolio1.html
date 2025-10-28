@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Studio | Premium Unity Games</title>
+    <title>Apple Style | Premium Unity Games</title>
     
     <!-- Tailwind CSS via CDN (Play CDN with JIT) -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -69,8 +69,11 @@
 
             return (
                 <nav className="fixed top-0 w-full nav-blur bg-black/80 z-50 border-b border-white/10">
-                    <div className="max-w-7xl mx-auto px-10 py-5 flex justify-between items-center">
-                        <div className="text-2xl font-semibold text-gray-100">Game Studio</div>
+                    <div className="max-w-7xl mx-auto px-10 py-3 flex justify-between items-center">
+                        <a href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                            <img src="assets/images/profile-pic.png" alt="Logo" className="w-10 h-10 rounded-full" />
+                            <span className="text-xl font-semibold text-gray-100">David Agito</span>
+                        </a>
                         <ul className="hidden md:flex gap-10">
                             <li><a href="#featured" onClick={(e) => scrollToSection(e, '#featured')} className="text-sm text-gray-100 hover:opacity-70 transition-opacity">Featured</a></li>
                             <li><a href="#games" onClick={(e) => scrollToSection(e, '#games')} className="text-sm text-gray-100 hover:opacity-70 transition-opacity">All Games</a></li>

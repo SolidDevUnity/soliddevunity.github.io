@@ -202,9 +202,9 @@ projectsweb:
 
         # Web
 
-      - title: Web portfolio 1
+      - title: Apple Style (Website)
         link: "/webportfolio1"
-        tagline: "A web portfolio project"
+        tagline: "A web project I made for portfolio purposes. The website is built with React and Tailwind CSS. It is a simple website that displays the my previous game dev portfolio."
 
 skills:
     title: Skills &amp; Proficiency
