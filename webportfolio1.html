@@ -5,340 +5,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Studio | Premium Unity Games</title>
     
+    <!-- Tailwind CSS via CDN (Play CDN with JIT) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
     <!-- React and ReactDOM via CDN -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <!-- Babel Standalone for JSX -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: #000;
-            color: #f5f5f7;
-            overflow-x: hidden;
-        }
-
-        /* Navigation */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            backdrop-filter: saturate(180%) blur(20px);
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .nav-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: 600;
-            color: #f5f5f7;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 40px;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: #f5f5f7;
-            text-decoration: none;
-            font-size: 14px;
-            transition: opacity 0.3s;
-        }
-
-        .nav-links a:hover {
-            opacity: 0.7;
-        }
-
-        /* Hero Section */
-        .hero {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 0 20px;
-            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
-        }
-
-        .hero h1 {
-            font-size: clamp(48px, 8vw, 96px);
-            font-weight: 700;
-            letter-spacing: -0.015em;
-            margin-bottom: 20px;
-            background: linear-gradient(90deg, #fff, #999);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero p {
-            font-size: clamp(21px, 3vw, 28px);
-            color: #86868b;
-            max-width: 800px;
-            margin-bottom: 40px;
-            line-height: 1.4;
-        }
-
-        .cta-button {
-            display: inline-block;
-            padding: 16px 40px;
-            background: #0071e3;
-            color: #fff;
-            border-radius: 980px;
-            text-decoration: none;
-            font-size: 17px;
-            font-weight: 500;
-            transition: all 0.3s;
-            cursor: pointer;
-            border: none;
-        }
-
-        .cta-button:hover {
-            background: #0077ed;
-            transform: scale(1.05);
-        }
-
-        /* Product Section */
-        .product-section {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            padding: 100px 40px;
-            position: relative;
-        }
-
-        .product-section:nth-child(even) {
-            background: #000;
-        }
-
-        .product-section:nth-child(odd) {
-            background: #161616;
-        }
-
-        .product-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 80px;
-            align-items: center;
-        }
-
-        .product-content.reverse {
-            direction: rtl;
-        }
-
-        .product-content.reverse .product-text {
-            direction: ltr;
-        }
-
-        .product-text h2 {
-            font-size: clamp(40px, 5vw, 64px);
-            font-weight: 700;
-            margin-bottom: 20px;
-            letter-spacing: -0.015em;
-        }
-
-        .product-text h3 {
-            font-size: clamp(24px, 3vw, 32px);
-            color: #86868b;
-            margin-bottom: 30px;
-            font-weight: 400;
-        }
-
-        .product-text p {
-            font-size: 21px;
-            line-height: 1.6;
-            color: #a1a1a6;
-            margin-bottom: 40px;
-        }
-
-        .product-image {
-            width: 100%;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            transition: transform 0.5s ease;
-        }
-
-        .product-image:hover {
-            transform: scale(1.02);
-        }
-
-        .product-image img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .feature-list {
-            list-style: none;
-            margin-top: 30px;
-        }
-
-        .feature-list li {
-            padding: 10px 0;
-            color: #f5f5f7;
-            font-size: 17px;
-            display: flex;
-            align-items: center;
-        }
-
-        .feature-list li:before {
-            content: "✓";
-            color: #0071e3;
-            font-weight: bold;
-            margin-right: 15px;
-            font-size: 20px;
-        }
-
-        /* Grid Section */
-        .grid-section {
-            padding: 100px 40px;
-            background: #000;
-        }
-
-        .grid-section h2 {
-            text-align: center;
-            font-size: clamp(40px, 5vw, 64px);
-            font-weight: 700;
-            margin-bottom: 80px;
-        }
-
-        .games-grid {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
-        }
-
-        .game-card {
-            background: #161616;
-            border-radius: 20px;
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            cursor: pointer;
-        }
-
-        .game-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7);
-        }
-
-        .game-card img {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-        }
-
-        .game-card-content {
-            padding: 30px;
-        }
-
-        .game-card h3 {
-            font-size: 24px;
-            margin-bottom: 15px;
-        }
-
-        .game-card p {
-            color: #86868b;
-            font-size: 17px;
-            line-height: 1.5;
-        }
-
-        /* Footer */
-        footer {
-            background: #161616;
-            padding: 60px 40px;
-            text-align: center;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        footer p {
-            color: #86868b;
-            font-size: 14px;
-        }
-
-        footer a {
-            color: #0071e3;
-            text-decoration: none;
-        }
-
-        /* Responsive */
-        @media (max-width: 968px) {
-            .product-content {
-                grid-template-columns: 1fr;
-                gap: 40px;
-            }
-
-            .product-content.reverse {
-                direction: ltr;
-            }
-
-            .nav-links {
-                display: none;
-            }
-
-            .games-grid {
-                grid-template-columns: 1fr;
+    <script>
+        // Tailwind Config
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        apple: {
+                            gray: '#86868b',
+                            'gray-light': '#a1a1a6',
+                            blue: '#0071e3',
+                        }
+                    }
+                }
             }
         }
-
-        /* Smooth scroll */
-        html {
-            scroll-behavior: smooth;
-        }
-
-        /* Fade in animation */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
-
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* React Framework Badge */
-        .framework-badge {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: linear-gradient(135deg, #61dafb, #2196f3);
-            color: #000;
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-size: 14px;
-            font-weight: 600;
-            z-index: 1000;
-            box-shadow: 0 4px 20px rgba(97, 218, 251, 0.4);
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-gradient {
+                background: linear-gradient(90deg, #fff, #999);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+            
+            .nav-blur {
+                backdrop-filter: saturate(180%) blur(20px);
+            }
+            
+            .feature-check::before {
+                content: "✓";
+                @apply text-apple-blue font-bold mr-4 text-xl;
+            }
         }
     </style>
 </head>
-<body>
+<body class="bg-black text-gray-100 overflow-x-hidden">
     <div id="root"></div>
 
     <script type="text/babel">
@@ -355,13 +68,13 @@
             };
 
             return (
-                <nav>
-                    <div className="nav-content">
-                        <div className="logo">Game Studio</div>
-                        <ul className="nav-links">
-                            <li><a href="#featured" onClick={(e) => scrollToSection(e, '#featured')}>Featured</a></li>
-                            <li><a href="#games" onClick={(e) => scrollToSection(e, '#games')}>All Games</a></li>
-                            <li><a href="/">Portfolio</a></li>
+                <nav className="fixed top-0 w-full nav-blur bg-black/80 z-50 border-b border-white/10">
+                    <div className="max-w-7xl mx-auto px-10 py-5 flex justify-between items-center">
+                        <div className="text-2xl font-semibold text-gray-100">Game Studio</div>
+                        <ul className="hidden md:flex gap-10">
+                            <li><a href="#featured" onClick={(e) => scrollToSection(e, '#featured')} className="text-sm text-gray-100 hover:opacity-70 transition-opacity">Featured</a></li>
+                            <li><a href="#games" onClick={(e) => scrollToSection(e, '#games')} className="text-sm text-gray-100 hover:opacity-70 transition-opacity">All Games</a></li>
+                            <li><a href="/" className="text-sm text-gray-100 hover:opacity-70 transition-opacity">Portfolio</a></li>
                         </ul>
                     </div>
                 </nav>
@@ -379,23 +92,30 @@
             };
 
             return (
-                <section className="hero">
-                    <h1>Game Development.<br />Reimagined.</h1>
-                    <p>Premium Unity games crafted with precision. Beautiful gameplay. Stunning visuals. Unforgettable experiences.</p>
-                    <a href="#featured" className="cta-button" onClick={scrollToSection}>Explore Our Games</a>
+                <section className="h-screen flex flex-col justify-center items-center text-center px-5 bg-gradient-to-br from-black to-neutral-900">
+                    <h1 className="text-5xl sm:text-7xl lg:text-9xl font-bold tracking-tight mb-5 text-gradient">
+                        Game Development.<br />Reimagined.
+                    </h1>
+                    <p className="text-xl sm:text-2xl lg:text-3xl text-apple-gray max-w-3xl mb-10 leading-snug">
+                        Premium Unity games crafted with precision. Beautiful gameplay. Stunning visuals. Unforgettable experiences.
+                    </p>
+                    <a href="#featured" onClick={scrollToSection} className="inline-block px-10 py-4 bg-apple-blue text-white rounded-full text-lg font-medium hover:bg-blue-600 hover:scale-105 transition-all cursor-pointer">
+                        Explore Our Games
+                    </a>
                 </section>
             );
         };
 
         // Product Section Component
-        const ProductSection = ({ title, subtitle, description, features, image, reverse, index }) => {
+        const ProductSection = ({ title, subtitle, description, features, image, reverse }) => {
             const sectionRef = useRef(null);
+            const [isVisible, setIsVisible] = useState(false);
 
             useEffect(() => {
                 const observer = new IntersectionObserver(
                     ([entry]) => {
                         if (entry.isIntersecting) {
-                            entry.target.classList.add('visible');
+                            setIsVisible(true);
                         }
                     },
                     { threshold: 0.1, rootMargin: '0px 0px -100px 0px' }
@@ -413,20 +133,28 @@
             }, []);
 
             return (
-                <section className="product-section">
-                    <div ref={sectionRef} className={`product-content fade-in ${reverse ? 'reverse' : ''}`}>
-                        <div className="product-text">
-                            <h2>{title}</h2>
-                            <h3>{subtitle}</h3>
-                            <p>{description}</p>
-                            <ul className="feature-list">
+                <section className="min-h-screen flex items-center px-5 sm:px-10 py-24 even:bg-black odd:bg-neutral-900">
+                    <div 
+                        ref={sectionRef}
+                        className={`max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center transition-all duration-700 ${
+                            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                        } ${reverse ? 'lg:flex-row-reverse' : ''}`}
+                        style={reverse ? {direction: 'rtl'} : {}}
+                    >
+                        <div style={{direction: 'ltr'}}>
+                            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-5 tracking-tight">{title}</h2>
+                            <h3 className="text-2xl sm:text-3xl lg:text-4xl text-apple-gray mb-8 font-normal">{subtitle}</h3>
+                            <p className="text-xl text-apple-gray-light leading-relaxed mb-10">{description}</p>
+                            <ul className="mt-8 space-y-3">
                                 {features.map((feature, idx) => (
-                                    <li key={idx}>{feature}</li>
+                                    <li key={idx} className="text-gray-100 text-lg flex items-center feature-check">
+                                        {feature}
+                                    </li>
                                 ))}
                             </ul>
                         </div>
-                        <div className="product-image">
-                            <img src={image} alt={title} />
+                        <div className="rounded-2xl overflow-hidden shadow-2xl hover:scale-105 transition-transform duration-500">
+                            <img src={image} alt={title} className="w-full h-auto" />
                         </div>
                     </div>
                 </section>
@@ -436,12 +164,13 @@
         // Game Card Component
         const GameCard = ({ title, description, image }) => {
             const cardRef = useRef(null);
+            const [isVisible, setIsVisible] = useState(false);
 
             useEffect(() => {
                 const observer = new IntersectionObserver(
                     ([entry]) => {
                         if (entry.isIntersecting) {
-                            entry.target.classList.add('visible');
+                            setIsVisible(true);
                         }
                     },
                     { threshold: 0.1, rootMargin: '0px 0px -100px 0px' }
@@ -459,11 +188,16 @@
             }, []);
 
             return (
-                <div ref={cardRef} className="game-card fade-in">
-                    <img src={image} alt={title} />
-                    <div className="game-card-content">
-                        <h3>{title}</h3>
-                        <p>{description}</p>
+                <div 
+                    ref={cardRef}
+                    className={`bg-neutral-900 rounded-2xl overflow-hidden hover:-translate-y-3 hover:shadow-2xl transition-all duration-300 cursor-pointer ${
+                        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                    }`}
+                >
+                    <img src={image} alt={title} className="w-full h-72 object-cover" />
+                    <div className="p-8">
+                        <h3 className="text-2xl font-semibold mb-4">{title}</h3>
+                        <p className="text-apple-gray text-lg leading-relaxed">{description}</p>
                     </div>
                 </div>
             );
@@ -472,9 +206,9 @@
         // Games Grid Component
         const GamesGrid = ({ games }) => {
             return (
-                <section className="grid-section" id="games">
-                    <h2>Complete Collection</h2>
-                    <div className="games-grid">
+                <section className="px-5 sm:px-10 py-24 bg-black" id="games">
+                    <h2 className="text-center text-4xl sm:text-5xl lg:text-6xl font-bold mb-20">Complete Collection</h2>
+                    <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                         {games.map((game, index) => (
                             <GameCard key={index} {...game} />
                         ))}
@@ -486,10 +220,10 @@
         // Footer Component
         const Footer = () => {
             return (
-                <footer>
-                    <p>&copy; 2025 Game Studio. Crafted with Unity and passion.</p>
-                    <p style={{ marginTop: '10px' }}>
-                        <a href="/">Back to Main Portfolio</a>
+                <footer className="bg-neutral-900 px-10 py-16 text-center border-t border-white/10">
+                    <p className="text-apple-gray text-sm">&copy; 2025 Game Studio. Crafted with Unity and passion.</p>
+                    <p className="mt-3">
+                        <a href="/" className="text-apple-blue hover:underline">Back to Main Portfolio</a>
                     </p>
                 </footer>
             );
@@ -498,8 +232,8 @@
         // Framework Badge Component
         const FrameworkBadge = () => {
             return (
-                <div className="framework-badge">
-                    ⚛️ Built with React
+                <div className="fixed bottom-5 right-5 bg-gradient-to-r from-cyan-400 to-blue-500 text-black px-6 py-3 rounded-full text-sm font-semibold z-50 shadow-lg shadow-cyan-500/50">
+                    ⚛️ React + 🎨 Tailwind
                 </div>
             );
         };
