@@ -152,12 +152,6 @@ projectsmobile:
         tagline: "A funny 3D posing game inspired by Couples Yoga. You arrange the limbs of the surfer midair to achieve the correct poses."
         gif: surfing-master.gif
 
-      - title: Slay the Spire-like Game
-        tagline: "Currently under NDA - Cannot provide details at this time."
-
-      - title: Animal Breeding Game
-        tagline: "Currently under NDA - Cannot provide details at this time."
-
 projectspc:
     title: PROJECTS (PC)
     intro: >
@@ -175,6 +169,12 @@ projectspc:
         link: "https://youtu.be/9NQyhB_VsJo"
         tagline: "A prototype of a brewing game I've worked on for a client. Mix and match recipes to create the right drink requested by the customers."
         gif: beer-brewing.gif
+
+      - title: Slay the Spire-like Game
+        tagline: "Currently under NDA - Cannot provide details at this time."
+
+      - title: Animal Breeding Game
+        tagline: "Currently under NDA - Cannot provide details at this time."
 
 projectstools:
     title: PROJECTS (Tools)
