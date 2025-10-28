@@ -189,3 +189,67 @@
 
 </section><!--//section-->
 {% endif %}
+
+{% assign projectsweb = site.data.data.projectsweb %}
+{% if projectsweb %}
+<section class="section projectsweb-section">
+
+  <h2 class="section-title">
+    <span class="fa-stack fa-xs">
+      <i class="fas fa-circle fa-stack-2x"></i>
+      <i class="fas fa-archive fa-stack-1x fa-inverse"></i>
+    </span>
+    {{ projectsweb.title }}
+  </h2>
+
+  {% if projectsweb.intro %}
+  <div class="intro">
+      <p>{{ projectsweb.intro }}</p>
+  </div><!--//intro-->
+  {% endif %}
+
+  <div class="projects-container">
+    {% for project in projectsweb.assignments %}
+      <div class="project-card">
+        {% if project.gif %}
+        <div class="project-image-wrapper">
+          {% if project.link %}
+            <a href="{{ project.link }}" target="_blank" class="project-image-link">
+              <img class="project-image" src="{{site.baseurl}}/assets/gifs/{{project.gif}}" alt="{{ project.title }}"/>
+              <div class="project-overlay">
+                <i class="fas fa-external-link-alt"></i>
+                <span>View Project</span>
+              </div>
+            </a>
+          {% else %}
+            <img class="project-image" src="{{site.baseurl}}/assets/gifs/{{project.gif}}" alt="{{ project.title }}"/>
+          {% endif %}
+        </div>
+        {% endif %}
+        
+        <div class="project-content">
+          <h3 class="project-title">
+            {% if project.link %}
+            <a href="{{ project.link }}" target="_blank">{{ project.title }}</a>
+            {% else %}
+            {{ project.title }}
+            {% endif %}
+          </h3>
+          
+          {% if project.tagline %}
+          <p class="project-tagline">{{ project.tagline }}</p>
+          {% endif %}
+          
+          {% if project.link %}
+          <a href="{{ project.link }}" target="_blank" class="project-link-btn">
+            <i class="fas fa-external-link-alt"></i>
+            View Project
+          </a>
+          {% endif %}
+        </div>
+      </div><!--//project-card-->
+    {% endfor %}
+  </div>
+
+</section><!--//section-->
+{% endif %}

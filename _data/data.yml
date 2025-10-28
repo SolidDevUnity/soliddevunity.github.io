@@ -194,6 +194,18 @@ projectstools:
         tagline: "This is a UI test exam I've worked on using only native Unity features. The requirements for the exam is added on the readme of this github link page. This is to showcase how I do my code and the architecture I follow. Probably not perfect but I'll be updating this repo overtime as I learn more."
         gif: ui-test.gif
 
+projectsweb:
+    title: PROJECTS (Web)
+    intro: >
+      Below are web development projects I've worked on.
+    assignments:
+
+        # Web
+
+      - title: Web portfolio 1
+        link: "/webportfolio1"
+        tagline: "A web portfolio project"
+
 skills:
     title: Skills &amp; Proficiency
 

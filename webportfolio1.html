@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Studio | Premium Unity Games</title>
+    
+    <!-- React and ReactDOM via CDN -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- Babel Standalone for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #000;
+            color: #f5f5f7;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            backdrop-filter: saturate(180%) blur(20px);
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: #f5f5f7;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #f5f5f7;
+            text-decoration: none;
+            font-size: 14px;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.7;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+        }
+
+        .hero h1 {
+            font-size: clamp(48px, 8vw, 96px);
+            font-weight: 700;
+            letter-spacing: -0.015em;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #fff, #999);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: clamp(21px, 3vw, 28px);
+            color: #86868b;
+            max-width: 800px;
+            margin-bottom: 40px;
+            line-height: 1.4;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 16px 40px;
+            background: #0071e3;
+            color: #fff;
+            border-radius: 980px;
+            text-decoration: none;
+            font-size: 17px;
+            font-weight: 500;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .cta-button:hover {
+            background: #0077ed;
+            transform: scale(1.05);
+        }
+
+        /* Product Section */
+        .product-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 100px 40px;
+            position: relative;
+        }
+
+        .product-section:nth-child(even) {
+            background: #000;
+        }
+
+        .product-section:nth-child(odd) {
+            background: #161616;
+        }
+
+        .product-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .product-content.reverse {
+            direction: rtl;
+        }
+
+        .product-content.reverse .product-text {
+            direction: ltr;
+        }
+
+        .product-text h2 {
+            font-size: clamp(40px, 5vw, 64px);
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: -0.015em;
+        }
+
+        .product-text h3 {
+            font-size: clamp(24px, 3vw, 32px);
+            color: #86868b;
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+
+        .product-text p {
+            font-size: 21px;
+            line-height: 1.6;
+            color: #a1a1a6;
+            margin-bottom: 40px;
+        }
+
+        .product-image {
+            width: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            transition: transform 0.5s ease;
+        }
+
+        .product-image:hover {
+            transform: scale(1.02);
+        }
+
+        .product-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-top: 30px;
+        }
+
+        .feature-list li {
+            padding: 10px 0;
+            color: #f5f5f7;
+            font-size: 17px;
+            display: flex;
+            align-items: center;
+        }
+
+        .feature-list li:before {
+            content: "✓";
+            color: #0071e3;
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 20px;
+        }
+
+        /* Grid Section */
+        .grid-section {
+            padding: 100px 40px;
+            background: #000;
+        }
+
+        .grid-section h2 {
+            text-align: center;
+            font-size: clamp(40px, 5vw, 64px);
+            font-weight: 700;
+            margin-bottom: 80px;
+        }
+
+        .games-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .game-card {
+            background: #161616;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7);
+        }
+
+        .game-card img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+
+        .game-card-content {
+            padding: 30px;
+        }
+
+        .game-card h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .game-card p {
+            color: #86868b;
+            font-size: 17px;
+            line-height: 1.5;
+        }
+
+        /* Footer */
+        footer {
+            background: #161616;
+            padding: 60px 40px;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        footer p {
+            color: #86868b;
+            font-size: 14px;
+        }
+
+        footer a {
+            color: #0071e3;
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .product-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .product-content.reverse {
+                direction: ltr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Fade in animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* React Framework Badge */
+        .framework-badge {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #61dafb, #2196f3);
+            color: #000;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(97, 218, 251, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // Navigation Component
+        const Navigation = () => {
+            const scrollToSection = (e, id) => {
+                e.preventDefault();
+                const element = document.querySelector(id);
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            };
+
+            return (
+                <nav>
+                    <div className="nav-content">
+                        <div className="logo">Game Studio</div>
+                        <ul className="nav-links">
+                            <li><a href="#featured" onClick={(e) => scrollToSection(e, '#featured')}>Featured</a></li>
+                            <li><a href="#games" onClick={(e) => scrollToSection(e, '#games')}>All Games</a></li>
+                            <li><a href="/">Portfolio</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            );
+        };
+
+        // Hero Component
+        const Hero = () => {
+            const scrollToSection = (e) => {
+                e.preventDefault();
+                const element = document.querySelector('#featured');
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            };
+
+            return (
+                <section className="hero">
+                    <h1>Game Development.<br />Reimagined.</h1>
+                    <p>Premium Unity games crafted with precision. Beautiful gameplay. Stunning visuals. Unforgettable experiences.</p>
+                    <a href="#featured" className="cta-button" onClick={scrollToSection}>Explore Our Games</a>
+                </section>
+            );
+        };
+
+        // Product Section Component
+        const ProductSection = ({ title, subtitle, description, features, image, reverse, index }) => {
+            const sectionRef = useRef(null);
+
+            useEffect(() => {
+                const observer = new IntersectionObserver(
+                    ([entry]) => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                        }
+                    },
+                    { threshold: 0.1, rootMargin: '0px 0px -100px 0px' }
+                );
+
+                if (sectionRef.current) {
+                    observer.observe(sectionRef.current);
+                }
+
+                return () => {
+                    if (sectionRef.current) {
+                        observer.unobserve(sectionRef.current);
+                    }
+                };
+            }, []);
+
+            return (
+                <section className="product-section">
+                    <div ref={sectionRef} className={`product-content fade-in ${reverse ? 'reverse' : ''}`}>
+                        <div className="product-text">
+                            <h2>{title}</h2>
+                            <h3>{subtitle}</h3>
+                            <p>{description}</p>
+                            <ul className="feature-list">
+                                {features.map((feature, idx) => (
+                                    <li key={idx}>{feature}</li>
+                                ))}
+                            </ul>
+                        </div>
+                        <div className="product-image">
+                            <img src={image} alt={title} />
+                        </div>
+                    </div>
+                </section>
+            );
+        };
+
+        // Game Card Component
+        const GameCard = ({ title, description, image }) => {
+            const cardRef = useRef(null);
+
+            useEffect(() => {
+                const observer = new IntersectionObserver(
+                    ([entry]) => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                        }
+                    },
+                    { threshold: 0.1, rootMargin: '0px 0px -100px 0px' }
+                );
+
+                if (cardRef.current) {
+                    observer.observe(cardRef.current);
+                }
+
+                return () => {
+                    if (cardRef.current) {
+                        observer.unobserve(cardRef.current);
+                    }
+                };
+            }, []);
+
+            return (
+                <div ref={cardRef} className="game-card fade-in">
+                    <img src={image} alt={title} />
+                    <div className="game-card-content">
+                        <h3>{title}</h3>
+                        <p>{description}</p>
+                    </div>
+                </div>
+            );
+        };
+
+        // Games Grid Component
+        const GamesGrid = ({ games }) => {
+            return (
+                <section className="grid-section" id="games">
+                    <h2>Complete Collection</h2>
+                    <div className="games-grid">
+                        {games.map((game, index) => (
+                            <GameCard key={index} {...game} />
+                        ))}
+                    </div>
+                </section>
+            );
+        };
+
+        // Footer Component
+        const Footer = () => {
+            return (
+                <footer>
+                    <p>&copy; 2025 Game Studio. Crafted with Unity and passion.</p>
+                    <p style={{ marginTop: '10px' }}>
+                        <a href="/">Back to Main Portfolio</a>
+                    </p>
+                </footer>
+            );
+        };
+
+        // Framework Badge Component
+        const FrameworkBadge = () => {
+            return (
+                <div className="framework-badge">
+                    ⚛️ Built with React
+                </div>
+            );
+        };
+
+        // Main App Component
+        const App = () => {
+            const featuredGames = [
+                {
+                    title: "Bounce It!",
+                    subtitle: "Physics-based perfection.",
+                    description: "Experience the perfect blend of beautiful casual gameplay and stunning visual design. Every bounce is crafted to perfection.",
+                    features: [
+                        "Intuitive touch controls",
+                        "Beautiful particle effects",
+                        "Addictive gameplay loop"
+                    ],
+                    image: "assets/gifs/bounce-it.gif",
+                    reverse: false
+                },
+                {
+                    title: "Make Me Fraud",
+                    subtitle: "Master of disguise.",
+                    description: "A revolutionary disguise game where creativity meets strategy. Transform clients to bypass security in this clever puzzle adventure.",
+                    features: [
+                        "Released on App Store",
+                        "Passed CTR testing",
+                        "Unique gameplay mechanics"
+                    ],
+                    image: "assets/gifs/make-me-fraud.gif",
+                    reverse: true
+                },
+                {
+                    title: "Slow Mo Ninja Stars",
+                    subtitle: "Precision in slow motion.",
+                    description: "Time bends to your will. Master the art of precision throwing with stunning slow-motion mechanics that make every moment epic.",
+                    features: [
+                        "Cinematic slow-motion effects",
+                        "Satisfying combat mechanics",
+                        "Challenging levels"
+                    ],
+                    image: "assets/gifs/slow-mo-ninja-stars.gif",
+                    reverse: false
+                },
+                {
+                    title: "Car Chase Simulator",
+                    subtitle: "Feel the adrenaline.",
+                    description: "Race, chase, and destroy in this high-octane PC experience. Drift through intense missions with full car customization.",
+                    features: [
+                        "Advanced drift mechanics",
+                        "AI enemy racing",
+                        "Full car customization"
+                    ],
+                    image: "assets/gifs/racinggame.gif",
+                    reverse: true
+                }
+            ];
+
+            const allGames = [
+                {
+                    title: "Jigsaw Puzzle",
+                    description: "A relaxing casual mobile game designed for peaceful gameplay moments.",
+                    image: "assets/gifs/jigsawpuzzle.gif"
+                },
+                {
+                    title: "Hamster Biter",
+                    description: "Dress up your hamster and help them eat in this adorable casual experience.",
+                    image: "assets/gifs/hamster-biter.gif"
+                },
+                {
+                    title: "Zoo Life",
+                    description: "An idle game where animals collect resources to rebuild a destroyed zoo.",
+                    image: "assets/gifs/zoo-life.gif"
+                },
+                {
+                    title: "Cocktails Please!",
+                    description: "Water sorting puzzle with stunning URP Shader Graph pouring effects.",
+                    image: "assets/gifs/water-sort.gif"
+                },
+                {
+                    title: "Surfing Master",
+                    description: "A funny 3D posing game where you arrange limbs mid-air for perfect poses.",
+                    image: "assets/gifs/surfing-master.gif"
+                },
+                {
+                    title: "Beer Brewing Game",
+                    description: "Mix and match recipes to create drinks requested by customers.",
+                    image: "assets/gifs/beer-brewing.gif"
+                },
+                {
+                    title: "Hex World Editor",
+                    description: "A powerful level editor tool with hex blocks and JSON-based saving.",
+                    image: "assets/gifs/hex-world-editor.gif"
+                },
+                {
+                    title: "UI Test Sample",
+                    description: "Showcase of clean code architecture using native Unity features.",
+                    image: "assets/gifs/ui-test.gif"
+                }
+            ];
+
+            return (
+                <>
+                    <Navigation />
+                    <Hero />
+                    <div id="featured">
+                        {featuredGames.map((game, index) => (
+                            <ProductSection key={index} {...game} index={index} />
+                        ))}
+                    </div>
+                    <GamesGrid games={allGames} />
+                    <Footer />
+                    <FrameworkBadge />
+                </>
+            );
+        };
+
+        // Render the app
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
