@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | David Agito</title>
+    
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Vue.js 3 via CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <!-- Chart.js for analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script>
+        // Tailwind Config
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        admin: {
+                            primary: '#4f46e5',
+                            secondary: '#7c3aed',
+                            dark: '#1e1b4b',
+                            darker: '#0f0a29',
+                            light: '#f8fafc',
+                            sidebar: '#1f2937',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .sidebar-transition {
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            
+            .modal-backdrop {
+                backdrop-filter: blur(4px);
+            }
+            
+            @keyframes slideIn {
+                from {
+                    transform: translateY(-10px);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateY(0);
+                    opacity: 1;
+                }
+            }
+            
+            .slide-in {
+                animation: slideIn 0.3s ease-out forwards;
+            }
+
+            .table-row-hover:hover {
+                background-color: rgba(99, 102, 241, 0.05);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+    <div id="app"></div>
+
+    <script type="module">
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    // UI State
+                    currentView: 'dashboard',
+                    sidebarOpen: true,
+                    showModal: false,
+                    modalMode: 'add',
+                    currentEditItem: null,
+                    
+                    // Search and Filter
+                    searchQuery: '',
+                    statusFilter: 'all',
+                    sortField: 'name',
+                    sortDirection: 'asc',
+                    
+                    // Mock Data - Users
+                    users: [
+                        { id: 1, name: 'David Agito', email: 'davidagito8@gmail.com', role: 'Admin', status: 'active', joinDate: '2023-01-15', avatar: 'assets/images/profile-pic.png' },
+                        { id: 2, name: 'Sarah Johnson', email: 'sarah.j@example.com', role: 'Developer', status: 'active', joinDate: '2023-03-20', avatar: '' },
+                        { id: 3, name: 'Mike Chen', email: 'mike.chen@example.com', role: 'Designer', status: 'active', joinDate: '2023-05-10', avatar: '' },
+                        { id: 4, name: 'Emma Wilson', email: 'emma.w@example.com', role: 'Developer', status: 'inactive', joinDate: '2023-07-01', avatar: '' },
+                        { id: 5, name: 'Alex Brown', email: 'alex.brown@example.com', role: 'Manager', status: 'active', joinDate: '2023-02-14', avatar: '' },
+                        { id: 6, name: 'Lisa Park', email: 'lisa.park@example.com', role: 'Developer', status: 'active', joinDate: '2023-08-22', avatar: '' },
+                        { id: 7, name: 'Tom Anderson', email: 'tom.a@example.com', role: 'Designer', status: 'inactive', joinDate: '2023-04-05', avatar: '' },
+                        { id: 8, name: 'Rachel Kim', email: 'rachel.kim@example.com', role: 'Developer', status: 'active', joinDate: '2023-09-12', avatar: '' }
+                    ],
+                    
+                    // Mock Data - Projects
+                    projects: [
+                        { id: 1, name: 'Bounce It!', type: 'Mobile Game', status: 'completed', progress: 100, startDate: '2023-01-01', endDate: '2023-04-15', team: 4 },
+                        { id: 2, name: 'Make Me Fraud', type: 'Mobile Game', status: 'completed', progress: 100, startDate: '2023-02-10', endDate: '2023-06-20', team: 5 },
+                        { id: 3, name: 'Slow Mo Ninja Stars', type: 'Mobile Game', status: 'completed', progress: 100, startDate: '2023-03-15', endDate: '2023-07-30', team: 4 },
+                        { id: 4, name: 'Next Gen RPG', type: 'PC Game', status: 'in_progress', progress: 65, startDate: '2023-08-01', endDate: '2024-12-31', team: 8 },
+                        { id: 5, name: 'VR Experience', type: 'VR Game', status: 'in_progress', progress: 40, startDate: '2023-09-15', endDate: '2024-06-30', team: 6 },
+                        { id: 6, name: 'Casual Puzzle', type: 'Mobile Game', status: 'planning', progress: 15, startDate: '2024-01-01', endDate: '2024-08-15', team: 3 }
+                    ],
+                    
+                    // Dashboard Stats
+                    stats: {
+                        totalUsers: 8,
+                        activeProjects: 2,
+                        revenue: 125430,
+                        growth: 23.5
+                    },
+                    
+                    // Analytics Data
+                    analyticsData: {
+                        downloads: [1200, 1900, 2500, 2100, 2800, 3200, 3600],
+                        revenue: [4500, 5200, 6100, 5800, 7200, 8100, 9300],
+                        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                    },
+                    
+                    // Form Data
+                    formData: {
+                        name: '',
+                        email: '',
+                        role: 'Developer',
+                        status: 'active',
+                        joinDate: ''
+                    }
+                }
+            },
+            computed: {
+                filteredAndSortedUsers() {
+                    let filtered = this.users;
+                    
+                    // Apply search filter
+                    if (this.searchQuery) {
+                        filtered = filtered.filter(user => 
+                            user.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+                            user.email.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+                            user.role.toLowerCase().includes(this.searchQuery.toLowerCase())
+                        );
+                    }
+                    
+                    // Apply status filter
+                    if (this.statusFilter !== 'all') {
+                        filtered = filtered.filter(user => user.status === this.statusFilter);
+                    }
+                    
+                    // Apply sorting
+                    return filtered.sort((a, b) => {
+                        let aVal = a[this.sortField];
+                        let bVal = b[this.sortField];
+                        
+                        if (typeof aVal === 'string') {
+                            aVal = aVal.toLowerCase();
+                            bVal = bVal.toLowerCase();
+                        }
+                        
+                        if (this.sortDirection === 'asc') {
+                            return aVal > bVal ? 1 : -1;
+                        } else {
+                            return aVal < bVal ? 1 : -1;
+                        }
+                    });
+                },
+                
+                filteredProjects() {
+                    let filtered = this.projects;
+                    
+                    if (this.searchQuery) {
+                        filtered = filtered.filter(project =>
+                            project.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+                            project.type.toLowerCase().includes(this.searchQuery.toLowerCase())
+                        );
+                    }
+                    
+                    if (this.statusFilter !== 'all') {
+                        filtered = filtered.filter(project => project.status === this.statusFilter);
+                    }
+                    
+                    return filtered.sort((a, b) => {
+                        let aVal = a[this.sortField];
+                        let bVal = b[this.sortField];
+                        
+                        if (typeof aVal === 'string') {
+                            aVal = aVal.toLowerCase();
+                            bVal = bVal.toLowerCase();
+                        }
+                        
+                        if (this.sortDirection === 'asc') {
+                            return aVal > bVal ? 1 : -1;
+                        } else {
+                            return aVal < bVal ? 1 : -1;
+                        }
+                    });
+                },
+                
+                activeUsers() {
+                    return this.users.filter(u => u.status === 'active').length;
+                },
+                
+                completedProjects() {
+                    return this.projects.filter(p => p.status === 'completed').length;
+                }
+            },
+            methods: {
+                changeView(view) {
+                    this.currentView = view;
+                    this.searchQuery = '';
+                    this.statusFilter = 'all';
+                    this.sortField = 'name';
+                    
+                    if (view === 'analytics') {
+                        this.$nextTick(() => {
+                            this.renderCharts();
+                        });
+                    }
+                },
+                
+                toggleSidebar() {
+                    this.sidebarOpen = !this.sidebarOpen;
+                },
+                
+                sortBy(field) {
+                    if (this.sortField === field) {
+                        this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+                    } else {
+                        this.sortField = field;
+                        this.sortDirection = 'asc';
+                    }
+                },
+                
+                openAddModal() {
+                    this.modalMode = 'add';
+                    this.formData = {
+                        name: '',
+                        email: '',
+                        role: 'Developer',
+                        status: 'active',
+                        joinDate: new Date().toISOString().split('T')[0]
+                    };
+                    this.showModal = true;
+                },
+                
+                openEditModal(user) {
+                    this.modalMode = 'edit';
+                    this.currentEditItem = user;
+                    this.formData = { ...user };
+                    this.showModal = true;
+                },
+                
+                closeModal() {
+                    this.showModal = false;
+                    this.currentEditItem = null;
+                },
+                
+                saveUser() {
+                    if (this.modalMode === 'add') {
+                        const newUser = {
+                            id: this.users.length + 1,
+                            ...this.formData,
+                            avatar: ''
+                        };
+                        this.users.push(newUser);
+                        this.stats.totalUsers++;
+                    } else {
+                        const index = this.users.findIndex(u => u.id === this.currentEditItem.id);
+                        if (index !== -1) {
+                            this.users[index] = { ...this.users[index], ...this.formData };
+                        }
+                    }
+                    this.closeModal();
+                },
+                
+                deleteUser(userId) {
+                    if (confirm('Are you sure you want to delete this user?')) {
+                        this.users = this.users.filter(u => u.id !== userId);
+                        this.stats.totalUsers--;
+                    }
+                },
+                
+                getStatusColor(status) {
+                    const colors = {
+                        active: 'bg-green-100 text-green-800',
+                        inactive: 'bg-gray-100 text-gray-800',
+                        completed: 'bg-blue-100 text-blue-800',
+                        in_progress: 'bg-yellow-100 text-yellow-800',
+                        planning: 'bg-purple-100 text-purple-800'
+                    };
+                    return colors[status] || 'bg-gray-100 text-gray-800';
+                },
+                
+                formatCurrency(value) {
+                    return new Intl.NumberFormat('en-US', {
+                        style: 'currency',
+                        currency: 'USD'
+                    }).format(value);
+                },
+                
+                renderCharts() {
+                    // Downloads Chart
+                    const downloadsCtx = document.getElementById('downloadsChart');
+                    if (downloadsCtx) {
+                        new Chart(downloadsCtx, {
+                            type: 'line',
+                            data: {
+                                labels: this.analyticsData.labels,
+                                datasets: [{
+                                    label: 'Downloads',
+                                    data: this.analyticsData.downloads,
+                                    borderColor: 'rgb(79, 70, 229)',
+                                    backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                                    tension: 0.4,
+                                    fill: true
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    legend: {
+                                        display: false
+                                    }
+                                },
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
+                                }
+                            }
+                        });
+                    }
+                    
+                    // Revenue Chart
+                    const revenueCtx = document.getElementById('revenueChart');
+                    if (revenueCtx) {
+                        new Chart(revenueCtx, {
+                            type: 'bar',
+                            data: {
+                                labels: this.analyticsData.labels,
+                                datasets: [{
+                                    label: 'Revenue',
+                                    data: this.analyticsData.revenue,
+                                    backgroundColor: 'rgba(124, 58, 237, 0.8)',
+                                    borderRadius: 8
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    legend: {
+                                        display: false
+                                    }
+                                },
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            },
+            mounted() {
+                // Initialize with today's date
+                this.formData.joinDate = new Date().toISOString().split('T')[0];
+            },
+            template: `
+                <div class="flex h-screen overflow-hidden">
+                    <!-- Sidebar -->
+                    <aside :class="[
+                        'bg-admin-sidebar text-white sidebar-transition',
+                        sidebarOpen ? 'w-64' : 'w-20'
+                    ]" class="flex-shrink-0 overflow-y-auto">
+                        <div class="p-6">
+                            <div class="flex items-center gap-3 mb-8">
+                                <img src="assets/images/profile-pic.png" alt="Logo" class="w-10 h-10 rounded-lg" />
+                                <span v-show="sidebarOpen" class="text-xl font-bold">Admin</span>
+                            </div>
+                            
+                            <nav class="space-y-2">
+                                <button @click="changeView('dashboard')" 
+                                        :class="currentView === 'dashboard' ? 'bg-admin-primary' : 'hover:bg-gray-700'"
+                                        class="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors">
+                                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                                    </svg>
+                                    <span v-show="sidebarOpen">Dashboard</span>
+                                </button>
+                                
+                                <button @click="changeView('users')" 
+                                        :class="currentView === 'users' ? 'bg-admin-primary' : 'hover:bg-gray-700'"
+                                        class="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors">
+                                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                                    </svg>
+                                    <span v-show="sidebarOpen">Users</span>
+                                </button>
+                                
+                                <button @click="changeView('projects')" 
+                                        :class="currentView === 'projects' ? 'bg-admin-primary' : 'hover:bg-gray-700'"
+                                        class="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors">
+                                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
+                                    </svg>
+                                    <span v-show="sidebarOpen">Projects</span>
+                                </button>
+                                
+                                <button @click="changeView('analytics')" 
+                                        :class="currentView === 'analytics' ? 'bg-admin-primary' : 'hover:bg-gray-700'"
+                                        class="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors">
+                                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                    </svg>
+                                    <span v-show="sidebarOpen">Analytics</span>
+                                </button>
+                                
+                                <button @click="changeView('settings')" 
+                                        :class="currentView === 'settings' ? 'bg-admin-primary' : 'hover:bg-gray-700'"
+                                        class="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors">
+                                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                    <span v-show="sidebarOpen">Settings</span>
+                                </button>
+                            </nav>
+                            
+                            <div v-show="sidebarOpen" class="mt-8 pt-8 border-t border-gray-700">
+                                <a href="/" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                                    </svg>
+                                    <span>Back to Portfolio</span>
+                                </a>
+                            </div>
+                        </div>
+                    </aside>
+                    
+                    <!-- Main Content -->
+                    <div class="flex-1 flex flex-col overflow-hidden">
+                        <!-- Header -->
+                        <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+                            <div class="flex items-center gap-4">
+                                <button @click="toggleSidebar" class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                                    </svg>
+                                </button>
+                                <h1 class="text-2xl font-bold text-gray-800 capitalize">{{ currentView }}</h1>
+                            </div>
+                            
+                            <div class="flex items-center gap-4">
+                                <button class="p-2 hover:bg-gray-100 rounded-lg transition-colors relative">
+                                    <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                                    </svg>
+                                    <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                                </button>
+                                
+                                <div class="flex items-center gap-3">
+                                    <img src="assets/images/profile-pic.png" alt="Admin" class="w-10 h-10 rounded-full" />
+                                    <div class="text-sm">
+                                        <div class="font-semibold text-gray-800">David Agito</div>
+                                        <div class="text-gray-500">Admin</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </header>
+                        
+                        <!-- Content Area -->
+                        <main class="flex-1 overflow-y-auto bg-gray-50 p-6">
+                            <!-- Dashboard View -->
+                            <div v-if="currentView === 'dashboard'" class="slide-in">
+                                <!-- Stats Grid -->
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                                    <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+                                        <div class="flex items-center justify-between mb-4">
+                                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                                                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <div class="text-3xl font-bold text-gray-800 mb-1">{{ activeUsers }}</div>
+                                        <div class="text-sm text-gray-500">Active Users</div>
+                                    </div>
+                                    
+                                    <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+                                        <div class="flex items-center justify-between mb-4">
+                                            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                                                <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <div class="text-3xl font-bold text-gray-800 mb-1">{{ stats.activeProjects }}</div>
+                                        <div class="text-sm text-gray-500">Active Projects</div>
+                                    </div>
+                                    
+                                    <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+                                        <div class="flex items-center justify-between mb-4">
+                                            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                                                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <div class="text-3xl font-bold text-gray-800 mb-1">{{ formatCurrency(stats.revenue) }}</div>
+                                        <div class="text-sm text-gray-500">Total Revenue</div>
+                                    </div>
+                                    
+                                    <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+                                        <div class="flex items-center justify-between mb-4">
+                                            <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                                                <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <div class="text-3xl font-bold text-gray-800 mb-1">{{ stats.growth }}%</div>
+                                        <div class="text-sm text-gray-500">Growth Rate</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Recent Activity -->
+                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                    <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+                                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Recent Users</h3>
+                                        <div class="space-y-4">
+                                            <div v-for="user in users.slice(0, 5)" :key="user.id" class="flex items-center gap-3">
+                                                <img v-if="user.avatar" :src="user.avatar" :alt="user.name" class="w-10 h-10 rounded-full" />
+                                                <div v-else class="w-10 h-10 rounded-full bg-admin-primary text-white flex items-center justify-center font-semibold">
+                                                    {{ user.name.charAt(0) }}
+                                                </div>
+                                                <div class="flex-1">
+                                                    <div class="font-medium text-gray-800">{{ user.name }}</div>
+                                                    <div class="text-sm text-gray-500">{{ user.email }}</div>
+                                                </div>
+                                                <span :class="getStatusColor(user.status)" class="px-2 py-1 rounded-full text-xs font-medium">
+                                                    {{ user.status }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+                                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Active Projects</h3>
+                                        <div class="space-y-4">
+                                            <div v-for="project in projects.filter(p => p.status !== 'completed').slice(0, 5)" :key="project.id">
+                                                <div class="flex items-center justify-between mb-2">
+                                                    <div class="font-medium text-gray-800">{{ project.name }}</div>
+                                                    <span class="text-sm font-semibold text-admin-primary">{{ project.progress }}%</span>
+                                                </div>
+                                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                                    <div class="bg-admin-primary h-2 rounded-full transition-all duration-300" :style="{ width: project.progress + '%' }"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Users View -->
+                            <div v-if="currentView === 'users'" class="slide-in">
+                                <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+                                    <!-- Table Header Actions -->
+                                    <div class="p-6 border-b border-gray-200">
+                                        <div class="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
+                                            <div class="flex-1 max-w-md">
+                                                <input v-model="searchQuery" type="text" placeholder="Search users..." 
+                                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-primary" />
+                                            </div>
+                                            <div class="flex gap-2">
+                                                <select v-model="statusFilter" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-primary">
+                                                    <option value="all">All Status</option>
+                                                    <option value="active">Active</option>
+                                                    <option value="inactive">Inactive</option>
+                                                </select>
+                                                <button @click="openAddModal" class="px-4 py-2 bg-admin-primary text-white rounded-lg hover:bg-admin-secondary transition-colors flex items-center gap-2">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                                    </svg>
+                                                    Add User
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Table -->
+                                    <div class="overflow-x-auto">
+                                        <table class="w-full">
+                                            <thead class="bg-gray-50 border-b border-gray-200">
+                                                <tr>
+                                                    <th @click="sortBy('name')" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100">
+                                                        <div class="flex items-center gap-2">
+                                                            Name
+                                                            <svg v-if="sortField === 'name'" class="w-4 h-4" :class="sortDirection === 'desc' ? 'transform rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                                                            </svg>
+                                                        </div>
+                                                    </th>
+                                                    <th @click="sortBy('email')" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100">
+                                                        <div class="flex items-center gap-2">
+                                                            Email
+                                                            <svg v-if="sortField === 'email'" class="w-4 h-4" :class="sortDirection === 'desc' ? 'transform rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                                                            </svg>
+                                                        </div>
+                                                    </th>
+                                                    <th @click="sortBy('role')" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100">
+                                                        <div class="flex items-center gap-2">
+                                                            Role
+                                                            <svg v-if="sortField === 'role'" class="w-4 h-4" :class="sortDirection === 'desc' ? 'transform rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                                                            </svg>
+                                                        </div>
+                                                    </th>
+                                                    <th @click="sortBy('status')" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100">
+                                                        <div class="flex items-center gap-2">
+                                                            Status
+                                                            <svg v-if="sortField === 'status'" class="w-4 h-4" :class="sortDirection === 'desc' ? 'transform rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                                                            </svg>
+                                                        </div>
+                                                    </th>
+                                                    <th @click="sortBy('joinDate')" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100">
+                                                        <div class="flex items-center gap-2">
+                                                            Join Date
+                                                            <svg v-if="sortField === 'joinDate'" class="w-4 h-4" :class="sortDirection === 'desc' ? 'transform rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                                                            </svg>
+                                                        </div>
+                                                    </th>
+                                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="bg-white divide-y divide-gray-200">
+                                                <tr v-for="user in filteredAndSortedUsers" :key="user.id" class="table-row-hover">
+                                                    <td class="px-6 py-4 whitespace-nowrap">
+                                                        <div class="flex items-center gap-3">
+                                                            <img v-if="user.avatar" :src="user.avatar" :alt="user.name" class="w-10 h-10 rounded-full" />
+                                                            <div v-else class="w-10 h-10 rounded-full bg-admin-primary text-white flex items-center justify-center font-semibold">
+                                                                {{ user.name.charAt(0) }}
+                                                            </div>
+                                                            <div class="font-medium text-gray-800">{{ user.name }}</div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="px-6 py-4 whitespace-nowrap text-gray-600">{{ user.email }}</td>
+                                                    <td class="px-6 py-4 whitespace-nowrap text-gray-600">{{ user.role }}</td>
+                                                    <td class="px-6 py-4 whitespace-nowrap">
+                                                        <span :class="getStatusColor(user.status)" class="px-3 py-1 rounded-full text-xs font-medium capitalize">
+                                                            {{ user.status }}
+                                                        </span>
+                                                    </td>
+                                                    <td class="px-6 py-4 whitespace-nowrap text-gray-600">{{ user.joinDate }}</td>
+                                                    <td class="px-6 py-4 whitespace-nowrap">
+                                                        <div class="flex items-center gap-2">
+                                                            <button @click="openEditModal(user)" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+                                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                                                </svg>
+                                                            </button>
+                                                            <button @click="deleteUser(user.id)" class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                                </svg>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    
+                                    <div v-if="filteredAndSortedUsers.length === 0" class="p-12 text-center text-gray-500">
+                                        No users found matching your criteria.
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Projects View -->
+                            <div v-if="currentView === 'projects'" class="slide-in">
+                                <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+                                    <div class="p-6 border-b border-gray-200">
+                                        <div class="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
+                                            <div class="flex-1 max-w-md">
+                                                <input v-model="searchQuery" type="text" placeholder="Search projects..." 
+                                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-primary" />
+                                            </div>
+                                            <select v-model="statusFilter" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-primary">
+                                                <option value="all">All Status</option>
+                                                <option value="completed">Completed</option>
+                                                <option value="in_progress">In Progress</option>
+                                                <option value="planning">Planning</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="p-6">
+                                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                            <div v-for="project in filteredProjects" :key="project.id" 
+                                                 class="border border-gray-200 rounded-xl p-6 hover:shadow-md transition-shadow">
+                                                <div class="flex items-start justify-between mb-4">
+                                                    <div>
+                                                        <h3 class="text-lg font-semibold text-gray-800 mb-1">{{ project.name }}</h3>
+                                                        <p class="text-sm text-gray-500">{{ project.type }}</p>
+                                                    </div>
+                                                    <span :class="getStatusColor(project.status)" class="px-3 py-1 rounded-full text-xs font-medium capitalize whitespace-nowrap">
+                                                        {{ project.status.replace('_', ' ') }}
+                                                    </span>
+                                                </div>
+                                                
+                                                <div class="mb-4">
+                                                    <div class="flex items-center justify-between mb-2 text-sm">
+                                                        <span class="text-gray-600">Progress</span>
+                                                        <span class="font-semibold text-admin-primary">{{ project.progress }}%</span>
+                                                    </div>
+                                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                                        <div class="bg-admin-primary h-2 rounded-full transition-all duration-300" :style="{ width: project.progress + '%' }"></div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="space-y-2 text-sm text-gray-600">
+                                                    <div class="flex items-center gap-2">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                                        </svg>
+                                                        <span>{{ project.startDate }} - {{ project.endDate }}</span>
+                                                    </div>
+                                                    <div class="flex items-center gap-2">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                                        </svg>
+                                                        <span>{{ project.team }} team members</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Analytics View -->
+                            <div v-if="currentView === 'analytics'" class="slide-in">
+                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                    <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+                                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Downloads This Week</h3>
+                                        <div class="h-64">
+                                            <canvas id="downloadsChart"></canvas>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+                                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Revenue This Week</h3>
+                                        <div class="h-64">
+                                            <canvas id="revenueChart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+                                    <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+                                        <h4 class="text-sm font-medium text-gray-500 mb-2">Total Downloads</h4>
+                                        <p class="text-3xl font-bold text-gray-800">{{ analyticsData.downloads.reduce((a, b) => a + b, 0).toLocaleString() }}</p>
+                                        <p class="text-sm text-green-600 mt-2">↑ 12% from last week</p>
+                                    </div>
+                                    
+                                    <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+                                        <h4 class="text-sm font-medium text-gray-500 mb-2">Total Revenue</h4>
+                                        <p class="text-3xl font-bold text-gray-800">{{ formatCurrency(analyticsData.revenue.reduce((a, b) => a + b, 0)) }}</p>
+                                        <p class="text-sm text-green-600 mt-2">↑ 18% from last week</p>
+                                    </div>
+                                    
+                                    <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+                                        <h4 class="text-sm font-medium text-gray-500 mb-2">Avg. Per Day</h4>
+                                        <p class="text-3xl font-bold text-gray-800">{{ formatCurrency(analyticsData.revenue.reduce((a, b) => a + b, 0) / 7) }}</p>
+                                        <p class="text-sm text-green-600 mt-2">↑ 8% from last week</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Settings View -->
+                            <div v-if="currentView === 'settings'" class="slide-in">
+                                <div class="max-w-3xl">
+                                    <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200 mb-6">
+                                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Profile Settings</h3>
+                                        <div class="space-y-4">
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                                                <input type="text" value="David Agito" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-primary" />
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                                                <input type="email" value="davidagito8@gmail.com" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-primary" />
+                                            </div>
+                                            <button class="px-6 py-2 bg-admin-primary text-white rounded-lg hover:bg-admin-secondary transition-colors">
+                                                Save Changes
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200 mb-6">
+                                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Notification Settings</h3>
+                                        <div class="space-y-4">
+                                            <div class="flex items-center justify-between">
+                                                <div>
+                                                    <div class="font-medium text-gray-800">Email Notifications</div>
+                                                    <div class="text-sm text-gray-500">Receive email updates</div>
+                                                </div>
+                                                <input type="checkbox" checked class="w-5 h-5 text-admin-primary rounded" />
+                                            </div>
+                                            <div class="flex items-center justify-between">
+                                                <div>
+                                                    <div class="font-medium text-gray-800">Push Notifications</div>
+                                                    <div class="text-sm text-gray-500">Receive push notifications</div>
+                                                </div>
+                                                <input type="checkbox" checked class="w-5 h-5 text-admin-primary rounded" />
+                                            </div>
+                                            <div class="flex items-center justify-between">
+                                                <div>
+                                                    <div class="font-medium text-gray-800">Weekly Reports</div>
+                                                    <div class="text-sm text-gray-500">Get weekly summary emails</div>
+                                                </div>
+                                                <input type="checkbox" class="w-5 h-5 text-admin-primary rounded" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+                                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Security</h3>
+                                        <div class="space-y-4">
+                                            <button class="w-full px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-left">
+                                                Change Password
+                                            </button>
+                                            <button class="w-full px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-left">
+                                                Enable Two-Factor Authentication
+                                            </button>
+                                            <button class="w-full px-4 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 transition-colors text-left">
+                                                Delete Account
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </main>
+                    </div>
+                    
+                    <!-- Modal -->
+                    <div v-if="showModal" class="fixed inset-0 z-50 overflow-y-auto" @click.self="closeModal">
+                        <div class="flex items-center justify-center min-h-screen px-4">
+                            <div class="fixed inset-0 bg-black/50 modal-backdrop"></div>
+                            
+                            <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 slide-in">
+                                <div class="flex items-center justify-between mb-6">
+                                    <h3 class="text-2xl font-bold text-gray-800">
+                                        {{ modalMode === 'add' ? 'Add New User' : 'Edit User' }}
+                                    </h3>
+                                    <button @click="closeModal" class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                                
+                                <form @submit.prevent="saveUser" class="space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                                        <input v-model="formData.name" type="text" required 
+                                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-primary" />
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                                        <input v-model="formData.email" type="email" required 
+                                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-primary" />
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Role</label>
+                                        <select v-model="formData.role" 
+                                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-primary">
+                                            <option>Admin</option>
+                                            <option>Manager</option>
+                                            <option>Developer</option>
+                                            <option>Designer</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                                        <select v-model="formData.status" 
+                                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-primary">
+                                            <option value="active">Active</option>
+                                            <option value="inactive">Inactive</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Join Date</label>
+                                        <input v-model="formData.joinDate" type="date" required 
+                                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-primary" />
+                                    </div>
+                                    
+                                    <div class="flex gap-3 pt-4">
+                                        <button type="button" @click="closeModal" 
+                                                class="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                                            Cancel
+                                        </button>
+                                        <button type="submit" 
+                                                class="flex-1 px-4 py-2 bg-admin-primary text-white rounded-lg hover:bg-admin-secondary transition-colors">
+                                            {{ modalMode === 'add' ? 'Add User' : 'Save Changes' }}
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Framework Badge -->
+                    <div class="fixed bottom-5 right-5 bg-gradient-to-r from-emerald-400 to-green-500 text-white px-6 py-3 rounded-full text-sm font-semibold z-40 shadow-lg shadow-emerald-500/50">
+                        💚 Vue.js + 🎨 Tailwind
+                    </div>
+                </div>
+            `
+        }).mount('#app');
+    </script>
+</body>
+</html>
+
