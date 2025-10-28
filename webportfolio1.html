@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apple Style | Premium Unity Games</title>
+    
+    <!-- Tailwind CSS via CDN (Play CDN with JIT) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- React and ReactDOM via CDN -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- Babel Standalone for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <script>
+        // Tailwind Config
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        apple: {
+                            gray: '#86868b',
+                            'gray-light': '#a1a1a6',
+                            blue: '#0071e3',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-gradient {
+                background: linear-gradient(90deg, #fff, #999);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+            
+            .nav-blur {
+                backdrop-filter: saturate(180%) blur(20px);
+            }
+            
+            .feature-check::before {
+                content: "✓";
+                @apply text-apple-blue font-bold mr-4 text-xl;
+            }
+        }
+    </style>
+</head>
+<body class="bg-black text-gray-100 overflow-x-hidden">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // Navigation Component
+        const Navigation = () => {
+            const scrollToSection = (e, id) => {
+                e.preventDefault();
+                const element = document.querySelector(id);
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            };
+
+            return (
+                <nav className="fixed top-0 w-full nav-blur bg-black/80 z-50 border-b border-white/10">
+                    <div className="max-w-7xl mx-auto px-10 py-3 flex justify-between items-center">
+                        <a href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                            <img src="assets/images/profile-pic.png" alt="Logo" className="w-10 h-10 rounded-full" />
+                            <span className="text-xl font-semibold text-gray-100">David Agito</span>
+                        </a>
+                        <ul className="hidden md:flex gap-10">
+                            <li><a href="#featured" onClick={(e) => scrollToSection(e, '#featured')} className="text-sm text-gray-100 hover:opacity-70 transition-opacity">Featured</a></li>
+                            <li><a href="#games" onClick={(e) => scrollToSection(e, '#games')} className="text-sm text-gray-100 hover:opacity-70 transition-opacity">All Games</a></li>
+                            <li><a href="/" className="text-sm text-gray-100 hover:opacity-70 transition-opacity">Portfolio</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            );
+        };
+
+        // Hero Component
+        const Hero = () => {
+            const scrollToSection = (e) => {
+                e.preventDefault();
+                const element = document.querySelector('#featured');
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            };
+
+            return (
+                <section className="min-h-screen flex flex-col justify-center items-center text-center px-5 bg-gradient-to-br from-black to-neutral-900">
+                    <h1 className="text-5xl sm:text-7xl lg:text-9xl font-bold tracking-tight mb-5 text-gradient leading-tight lg:leading-[1.5]">
+                        Game Portfolio<br />Reimagined.
+                    </h1>
+                    <p className="text-xl sm:text-2xl lg:text-3xl text-apple-gray max-w-3xl mb-10 leading-snug">
+                        Premium Unity games crafted with precision. Beautiful gameplay. Stunning visuals. Unforgettable experiences.
+                    </p>
+                    <a href="#featured" onClick={scrollToSection} className="inline-block px-10 py-4 bg-apple-blue text-white rounded-full text-lg font-medium hover:bg-blue-600 hover:scale-105 transition-all cursor-pointer">
+                        Explore Our Games
+                    </a>
+                </section>
+            );
+        };
+
+        // Product Section Component
+        const ProductSection = ({ title, subtitle, description, features, image, reverse }) => {
+            const sectionRef = useRef(null);
+            const [isVisible, setIsVisible] = useState(false);
+
+            useEffect(() => {
+                const observer = new IntersectionObserver(
+                    ([entry]) => {
+                        if (entry.isIntersecting) {
+                            setIsVisible(true);
+                        }
+                    },
+                    { threshold: 0.1, rootMargin: '0px 0px -100px 0px' }
+                );
+
+                if (sectionRef.current) {
+                    observer.observe(sectionRef.current);
+                }
+
+                return () => {
+                    if (sectionRef.current) {
+                        observer.unobserve(sectionRef.current);
+                    }
+                };
+            }, []);
+
+            return (
+                <section className="min-h-screen flex items-center px-5 sm:px-10 py-24 even:bg-black odd:bg-neutral-900">
+                    <div 
+                        ref={sectionRef}
+                        className={`max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center transition-all duration-700 ${
+                            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                        } ${reverse ? 'lg:flex-row-reverse' : ''}`}
+                        style={reverse ? {direction: 'rtl'} : {}}
+                    >
+                        <div style={{direction: 'ltr'}}>
+                            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-5 tracking-tight">{title}</h2>
+                            <h3 className="text-2xl sm:text-3xl lg:text-4xl text-apple-gray mb-8 font-normal">{subtitle}</h3>
+                            <p className="text-xl text-apple-gray-light leading-relaxed mb-10">{description}</p>
+                            <ul className="mt-8 space-y-3">
+                                {features.map((feature, idx) => (
+                                    <li key={idx} className="text-gray-100 text-lg flex items-center feature-check">
+                                        {feature}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                        <div className="rounded-2xl overflow-hidden shadow-2xl hover:scale-105 transition-transform duration-500">
+                            <img src={image} alt={title} className="w-full h-auto" />
+                        </div>
+                    </div>
+                </section>
+            );
+        };
+
+        // Game Card Component
+        const GameCard = ({ title, description, image }) => {
+            const cardRef = useRef(null);
+            const [isVisible, setIsVisible] = useState(false);
+
+            useEffect(() => {
+                const observer = new IntersectionObserver(
+                    ([entry]) => {
+                        if (entry.isIntersecting) {
+                            setIsVisible(true);
+                        }
+                    },
+                    { threshold: 0.1, rootMargin: '0px 0px -100px 0px' }
+                );
+
+                if (cardRef.current) {
+                    observer.observe(cardRef.current);
+                }
+
+                return () => {
+                    if (cardRef.current) {
+                        observer.unobserve(cardRef.current);
+                    }
+                };
+            }, []);
+
+            return (
+                <div 
+                    ref={cardRef}
+                    className={`bg-neutral-900 rounded-2xl overflow-hidden hover:-translate-y-3 hover:shadow-2xl transition-all duration-300 cursor-pointer ${
+                        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                    }`}
+                >
+                    <img src={image} alt={title} className="w-full h-72 object-cover" />
+                    <div className="p-8">
+                        <h3 className="text-2xl font-semibold mb-4">{title}</h3>
+                        <p className="text-apple-gray text-lg leading-relaxed">{description}</p>
+                    </div>
+                </div>
+            );
+        };
+
+        // Games Grid Component
+        const GamesGrid = ({ games }) => {
+            return (
+                <section className="px-5 sm:px-10 py-24 bg-black" id="games">
+                    <h2 className="text-center text-4xl sm:text-5xl lg:text-6xl font-bold mb-20">Complete Collection</h2>
+                    <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                        {games.map((game, index) => (
+                            <GameCard key={index} {...game} />
+                        ))}
+                    </div>
+                </section>
+            );
+        };
+
+        // Footer Component
+        const Footer = () => {
+            return (
+                <footer className="bg-neutral-900 px-10 py-16 text-center border-t border-white/10">
+                    <p className="text-apple-gray text-sm">&copy; 2025 Game Studio. Crafted with Unity and passion.</p>
+                    <p className="mt-3">
+                        <a href="/" className="text-apple-blue hover:underline">Back to Main Portfolio</a>
+                    </p>
+                </footer>
+            );
+        };
+
+        // Framework Badge Component
+        const FrameworkBadge = () => {
+            return (
+                <div className="fixed bottom-5 right-5 bg-gradient-to-r from-cyan-400 to-blue-500 text-black px-6 py-3 rounded-full text-sm font-semibold z-50 shadow-lg shadow-cyan-500/50">
+                    ⚛️ React + 🎨 Tailwind
+                </div>
+            );
+        };
+
+        // Main App Component
+        const App = () => {
+            const featuredGames = [
+                {
+                    title: "Bounce It!",
+                    subtitle: "Physics-based perfection.",
+                    description: "Experience the perfect blend of beautiful casual gameplay and stunning visual design. Every bounce is crafted to perfection.",
+                    features: [
+                        "Intuitive touch controls",
+                        "Beautiful particle effects",
+                        "Addictive gameplay loop"
+                    ],
+                    image: "assets/gifs/bounce-it.gif",
+                    reverse: false
+                },
+                {
+                    title: "Make Me Fraud",
+                    subtitle: "Master of disguise.",
+                    description: "A revolutionary disguise game where creativity meets strategy. Transform clients to bypass security in this clever puzzle adventure.",
+                    features: [
+                        "Released on App Store",
+                        "Passed CTR testing",
+                        "Unique gameplay mechanics"
+                    ],
+                    image: "assets/gifs/make-me-fraud.gif",
+                    reverse: true
+                },
+                {
+                    title: "Slow Mo Ninja Stars",
+                    subtitle: "Precision in slow motion.",
+                    description: "Time bends to your will. Master the art of precision throwing with stunning slow-motion mechanics that make every moment epic.",
+                    features: [
+                        "Cinematic slow-motion effects",
+                        "Satisfying combat mechanics",
+                        "Challenging levels"
+                    ],
+                    image: "assets/gifs/slow-mo-ninja-stars.gif",
+                    reverse: false
+                },
+                {
+                    title: "Car Chase Simulator",
+                    subtitle: "Feel the adrenaline.",
+                    description: "Race, chase, and destroy in this high-octane PC experience. Drift through intense missions with full car customization.",
+                    features: [
+                        "Advanced drift mechanics",
+                        "AI enemy racing",
+                        "Full car customization"
+                    ],
+                    image: "assets/gifs/racinggame.gif",
+                    reverse: true
+                }
+            ];
+
+            const allGames = [
+                {
+                    title: "Jigsaw Puzzle",
+                    description: "A relaxing casual mobile game designed for peaceful gameplay moments.",
+                    image: "assets/gifs/jigsawpuzzle.gif"
+                },
+                {
+                    title: "Hamster Biter",
+                    description: "Dress up your hamster and help them eat in this adorable casual experience.",
+                    image: "assets/gifs/hamster-biter.gif"
+                },
+                {
+                    title: "Zoo Life",
+                    description: "An idle game where animals collect resources to rebuild a destroyed zoo.",
+                    image: "assets/gifs/zoo-life.gif"
+                },
+                {
+                    title: "Cocktails Please!",
+                    description: "Water sorting puzzle with stunning URP Shader Graph pouring effects.",
+                    image: "assets/gifs/water-sort.gif"
+                },
+                {
+                    title: "Surfing Master",
+                    description: "A funny 3D posing game where you arrange limbs mid-air for perfect poses.",
+                    image: "assets/gifs/surfing-master.gif"
+                },
+                {
+                    title: "Beer Brewing Game",
+                    description: "Mix and match recipes to create drinks requested by customers.",
+                    image: "assets/gifs/beer-brewing.gif"
+                },
+                {
+                    title: "Hex World Editor",
+                    description: "A powerful level editor tool with hex blocks and JSON-based saving.",
+                    image: "assets/gifs/hex-world-editor.gif"
+                },
+                {
+                    title: "UI Test Sample",
+                    description: "Showcase of clean code architecture using native Unity features.",
+                    image: "assets/gifs/ui-test.gif"
+                }
+            ];
+
+            return (
+                <>
+                    <Navigation />
+                    <Hero />
+                    <div id="featured">
+                        {featuredGames.map((game, index) => (
+                            <ProductSection key={index} {...game} index={index} />
+                        ))}
+                    </div>
+                    <GamesGrid games={allGames} />
+                    <Footer />
+                    <FrameworkBadge />
+                </>
+            );
+        };
+
+        // Render the app
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>David Agito Studios | Game Development Company</title>
+    
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Vue.js 3 via CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <script>
+        // Tailwind Config
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            primary: '#6366f1',
+                            secondary: '#8b5cf6',
+                            dark: '#0f172a',
+                            darker: '#020617',
+                            light: '#f1f5f9',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-gradient {
+                background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+            
+            .nav-blur {
+                backdrop-filter: saturate(180%) blur(20px);
+            }
+            
+            .card-hover {
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            
+            .card-hover:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 25px 50px -12px rgba(99, 102, 241, 0.25);
+            }
+
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .fade-in-up {
+                animation: fadeInUp 0.6s ease-out forwards;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-brand-darker via-brand-dark to-slate-900 text-gray-100 overflow-x-hidden">
+    <div id="app"></div>
+
+    <script type="module">
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    currentSection: 'home',
+                    mobileMenuOpen: false,
+                    games: [
+                        {
+                            title: "Bounce It!",
+                            description: "Physics-based casual game with intuitive touch controls and beautiful particle effects. Perfect blend of fun and addictive gameplay.",
+                            category: "Casual",
+                            image: "assets/gifs/bounce-it.gif",
+                            status: "Released"
+                        },
+                        {
+                            title: "Make Me Fraud",
+                            description: "Revolutionary disguise game where creativity meets strategy. Successfully released on App Store with passed CTR testing.",
+                            category: "Puzzle",
+                            image: "assets/gifs/make-me-fraud.gif",
+                            status: "Live on App Store"
+                        },
+                        {
+                            title: "Slow Mo Ninja Stars",
+                            description: "Master the art of precision throwing with stunning slow-motion mechanics. Cinematic combat experience with challenging levels.",
+                            category: "Action",
+                            image: "assets/gifs/slow-mo-ninja-stars.gif",
+                            status: "Released"
+                        },
+                        {
+                            title: "Car Chase Simulator",
+                            description: "High-octane PC racing experience with advanced drift mechanics, AI racing, and full car customization systems.",
+                            category: "Racing",
+                            image: "assets/gifs/racinggame.gif",
+                            status: "PC Release"
+                        },
+                        {
+                            title: "Jigsaw Puzzle",
+                            description: "Relaxing casual mobile game designed for peaceful gameplay moments with beautiful imagery and smooth mechanics.",
+                            category: "Casual",
+                            image: "assets/gifs/jigsawpuzzle.gif",
+                            status: "Released"
+                        },
+                        {
+                            title: "Hamster Biter",
+                            description: "Adorable casual experience where you dress up your hamster and help them eat. Fun and engaging for all ages.",
+                            category: "Casual",
+                            image: "assets/gifs/hamster-biter.gif",
+                            status: "Released"
+                        },
+                        {
+                            title: "Zoo Life",
+                            description: "Idle game where animals collect resources to rebuild a destroyed zoo. Strategic resource management meets cute animals.",
+                            category: "Idle",
+                            image: "assets/gifs/zoo-life.gif",
+                            status: "Released"
+                        },
+                        {
+                            title: "Cocktails Please!",
+                            description: "Water sorting puzzle featuring stunning URP Shader Graph pouring effects. Satisfying visual feedback and challenging puzzles.",
+                            category: "Puzzle",
+                            image: "assets/gifs/water-sort.gif",
+                            status: "Released"
+                        },
+                        {
+                            title: "Surfing Master",
+                            description: "Funny 3D posing game where you arrange limbs mid-air for perfect poses. Hilarious physics and creative gameplay.",
+                            category: "Sports",
+                            image: "assets/gifs/surfing-master.gif",
+                            status: "Released"
+                        },
+                        {
+                            title: "Beer Brewing Game",
+                            description: "Mix and match recipes to create drinks requested by customers. Time management meets creativity in this brewing simulation.",
+                            category: "Simulation",
+                            image: "assets/gifs/beer-brewing.gif",
+                            status: "Released"
+                        },
+                        {
+                            title: "Hex World Editor",
+                            description: "Powerful level editor tool with hex blocks and JSON-based saving system. Professional-grade game development tool.",
+                            category: "Tool",
+                            image: "assets/gifs/hex-world-editor.gif",
+                            status: "Development Tool"
+                        },
+                        {
+                            title: "UI Test Sample",
+                            description: "Showcase of clean code architecture using native Unity features. Demonstrates best practices in UI development.",
+                            category: "Sample",
+                            image: "assets/gifs/ui-test.gif",
+                            status: "Demo"
+                        }
+                    ],
+                    services: [
+                        {
+                            icon: "🎮",
+                            title: "Mobile Game Development",
+                            description: "Full-cycle mobile game development for iOS and Android platforms using Unity engine."
+                        },
+                        {
+                            icon: "🖥️",
+                            title: "PC Game Development",
+                            description: "High-performance PC games with advanced mechanics and stunning visuals."
+                        },
+                        {
+                            icon: "🎨",
+                            title: "Game Design & Prototyping",
+                            description: "Rapid prototyping and game design services to bring your ideas to life quickly."
+                        },
+                        {
+                            icon: "🔧",
+                            title: "Custom Tools & Editors",
+                            description: "Bespoke development tools and level editors tailored to your project needs."
+                        }
+                    ],
+                    stats: [
+                        { number: "12+", label: "Games Released" },
+                        { number: "1M+", label: "Total Downloads" },
+                        { number: "5+", label: "Years Experience" },
+                        { number: "100%", label: "Client Satisfaction" }
+                    ]
+                }
+            },
+            methods: {
+                scrollToSection(id) {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        this.mobileMenuOpen = false;
+                    }
+                },
+                toggleMobileMenu() {
+                    this.mobileMenuOpen = !this.mobileMenuOpen;
+                }
+            },
+            template: `
+                <div>
+                    <!-- Navigation -->
+                    <nav class="fixed top-0 w-full nav-blur bg-brand-darker/90 z-50 border-b border-white/10">
+                        <div class="max-w-7xl mx-auto px-6 lg:px-10 py-4">
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center gap-3">
+                                    <img src="assets/images/profile-pic.png" alt="David Agito" class="w-10 h-10 rounded-lg object-cover" />
+                                    <span class="text-xl font-bold text-gradient">David Agito Studios</span>
+                                </div>
+                                
+                                <!-- Desktop Menu -->
+                                <ul class="hidden md:flex gap-8 items-center">
+                                    <li><a @click.prevent="scrollToSection('home')" href="#home" class="text-sm text-gray-300 hover:text-white transition-colors cursor-pointer">Home</a></li>
+                                    <li><a @click.prevent="scrollToSection('services')" href="#services" class="text-sm text-gray-300 hover:text-white transition-colors cursor-pointer">Services</a></li>
+                                    <li><a @click.prevent="scrollToSection('portfolio')" href="#portfolio" class="text-sm text-gray-300 hover:text-white transition-colors cursor-pointer">Portfolio</a></li>
+                                    <li><a @click.prevent="scrollToSection('contact')" href="#contact" class="text-sm text-gray-300 hover:text-white transition-colors cursor-pointer">Contact</a></li>
+                                    <li><a href="/" class="px-5 py-2 bg-gradient-to-r from-brand-primary to-brand-secondary rounded-full text-sm font-medium hover:opacity-90 transition-opacity">Main Portfolio</a></li>
+                                </ul>
+
+                                <!-- Mobile Menu Button -->
+                                <button @click="toggleMobileMenu" class="md:hidden text-white">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <!-- Mobile Menu -->
+                            <div v-show="mobileMenuOpen" class="md:hidden mt-4 pb-4 border-t border-white/10 pt-4">
+                                <ul class="flex flex-col gap-4">
+                                    <li><a @click.prevent="scrollToSection('home')" href="#home" class="block text-gray-300 hover:text-white transition-colors">Home</a></li>
+                                    <li><a @click.prevent="scrollToSection('services')" href="#services" class="block text-gray-300 hover:text-white transition-colors">Services</a></li>
+                                    <li><a @click.prevent="scrollToSection('portfolio')" href="#portfolio" class="block text-gray-300 hover:text-white transition-colors">Portfolio</a></li>
+                                    <li><a @click.prevent="scrollToSection('contact')" href="#contact" class="block text-gray-300 hover:text-white transition-colors">Contact</a></li>
+                                    <li><a href="/" class="block text-brand-primary hover:text-brand-secondary transition-colors">Main Portfolio</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </nav>
+
+                    <!-- Hero Section -->
+                    <section id="home" class="min-h-screen flex flex-col justify-center items-center text-center px-6 pt-20">
+                        <div class="max-w-5xl mx-auto">
+                            <h1 class="text-5xl sm:text-6xl lg:text-8xl font-bold tracking-tight mb-6 text-gradient leading-tight">
+                                Crafting Extraordinary Gaming Experiences
+                            </h1>
+                            <p class="text-xl sm:text-2xl lg:text-3xl text-gray-400 max-w-4xl mx-auto mb-10 leading-relaxed">
+                                We are a professional game development studio specializing in Unity-powered mobile and PC games. 
+                                From concept to launch, we bring your vision to life.
+                            </p>
+                            <div class="flex flex-wrap gap-4 justify-center">
+                                <button @click="scrollToSection('portfolio')" class="px-8 py-4 bg-gradient-to-r from-brand-primary to-brand-secondary text-white rounded-full text-lg font-medium hover:shadow-2xl hover:shadow-brand-primary/50 transition-all hover:scale-105">
+                                    View Our Work
+                                </button>
+                                <button @click="scrollToSection('contact')" class="px-8 py-4 bg-white/10 backdrop-blur-sm text-white rounded-full text-lg font-medium hover:bg-white/20 transition-all border border-white/20">
+                                    Get In Touch
+                                </button>
+                            </div>
+
+                            <!-- Stats -->
+                            <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 mt-20 max-w-4xl mx-auto">
+                                <div v-for="stat in stats" :key="stat.label" class="text-center">
+                                    <div class="text-4xl lg:text-5xl font-bold text-gradient mb-2">{{ stat.number }}</div>
+                                    <div class="text-gray-400 text-sm lg:text-base">{{ stat.label }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Services Section -->
+                    <section id="services" class="py-24 px-6 bg-gradient-to-b from-transparent to-brand-dark/50">
+                        <div class="max-w-7xl mx-auto">
+                            <div class="text-center mb-16">
+                                <h2 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">Our Services</h2>
+                                <p class="text-xl text-gray-400 max-w-3xl mx-auto">
+                                    Full-spectrum game development services powered by Unity and years of industry expertise
+                                </p>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                                <div v-for="service in services" :key="service.title" 
+                                     class="bg-gradient-to-br from-brand-dark/80 to-slate-900/80 backdrop-blur-sm p-8 rounded-2xl border border-white/10 card-hover">
+                                    <div class="text-5xl mb-4">{{ service.icon }}</div>
+                                    <h3 class="text-xl font-bold mb-4 text-white">{{ service.title }}</h3>
+                                    <p class="text-gray-400 leading-relaxed">{{ service.description }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Portfolio Section -->
+                    <section id="portfolio" class="py-24 px-6">
+                        <div class="max-w-7xl mx-auto">
+                            <div class="text-center mb-16">
+                                <h2 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">Our Portfolio</h2>
+                                <p class="text-xl text-gray-400 max-w-3xl mx-auto">
+                                    A showcase of our released games and development projects across multiple platforms
+                                </p>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                <div v-for="game in games" :key="game.title" 
+                                     class="bg-gradient-to-br from-brand-dark/60 to-slate-900/60 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/10 card-hover">
+                                    <div class="relative overflow-hidden h-64 bg-slate-800">
+                                        <img :src="game.image" :alt="game.title" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500" />
+                                        <div class="absolute top-4 right-4 bg-brand-primary/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold">
+                                            {{ game.category }}
+                                        </div>
+                                    </div>
+                                    <div class="p-6">
+                                        <div class="flex justify-between items-start mb-3">
+                                            <h3 class="text-xl font-bold text-white">{{ game.title }}</h3>
+                                        </div>
+                                        <p class="text-gray-400 text-sm leading-relaxed mb-4">{{ game.description }}</p>
+                                        <div class="flex items-center gap-2">
+                                            <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                                            <span class="text-xs text-gray-500 uppercase tracking-wider">{{ game.status }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- CTA Section -->
+                    <section id="contact" class="py-24 px-6 bg-gradient-to-br from-brand-primary/20 via-brand-secondary/20 to-pink-500/20 backdrop-blur-sm">
+                        <div class="max-w-4xl mx-auto text-center">
+                            <h2 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">Let's Build Something Amazing</h2>
+                            <p class="text-xl text-gray-300 mb-10 leading-relaxed">
+                                Ready to turn your game idea into reality? Our team is here to help you create 
+                                the next hit game. Get in touch to discuss your project.
+                            </p>
+                            <div class="flex flex-wrap gap-4 justify-center">
+                                <a href="mailto:contact@davidagito.com" class="px-8 py-4 bg-white text-brand-dark rounded-full text-lg font-medium hover:shadow-2xl hover:shadow-white/50 transition-all hover:scale-105">
+                                    📧 contact@davidagito.com
+                                </a>
+                                <a href="/" class="px-8 py-4 bg-white/10 backdrop-blur-sm text-white rounded-full text-lg font-medium hover:bg-white/20 transition-all border border-white/20">
+                                    View Main Portfolio
+                                </a>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Footer -->
+                    <footer class="bg-brand-darker/80 backdrop-blur-sm px-6 py-12 text-center border-t border-white/10">
+                        <div class="max-w-7xl mx-auto">
+                            <div class="flex items-center justify-center gap-3 mb-6">
+                                <img src="assets/images/profile-pic.png" alt="David Agito" class="w-8 h-8 rounded-lg object-cover" />
+                                <span class="text-lg font-bold text-gradient">David Agito Studios</span>
+                            </div>
+                            <p class="text-gray-400 text-sm mb-4">
+                                Professional game development studio crafting extraordinary gaming experiences with Unity.
+                            </p>
+                            <p class="text-gray-500 text-xs">
+                                &copy; 2025 David Agito Studios. All rights reserved.
+                            </p>
+                        </div>
+                    </footer>
+
+                    <!-- Framework Badge -->
+                    <div class="fixed bottom-5 right-5 bg-gradient-to-r from-emerald-400 to-green-500 text-brand-darker px-6 py-3 rounded-full text-sm font-semibold z-50 shadow-lg shadow-emerald-500/50">
+                        💚 Vue.js + 🎨 Tailwind
+                    </div>
+                </div>
+            `
+        }).mount('#app');
+    </script>
+</body>
+</html>
+
