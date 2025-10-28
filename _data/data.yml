@@ -210,6 +210,10 @@ projectsweb:
         link: "/CompanyStyle"
         tagline: "A professional game development company website built with Vue.js and Tailwind CSS. Showcases all my game projects as a company portfolio with modern design and smooth interactions."
 
+      - title: Admin Dashboard (Website)
+        link: "/AdminDashboard"
+        tagline: "A fully functional admin dashboard built with Vue.js and Tailwind CSS. Features real-time sorting, filtering, modal edits, analytics charts, and complete CRUD operations with mock data that behaves like a real database."
+
 skills:
     title: Skills &amp; Proficiency
 
