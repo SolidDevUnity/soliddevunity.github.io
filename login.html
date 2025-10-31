@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Vue.js 3 CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <!-- Supabase JS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen flex items-center justify-center p-4">
+    <div id="app" class="w-full max-w-md">
+        <div class="bg-white rounded-2xl shadow-xl p-8">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold text-gray-800 mb-2">Welcome Back</h1>
+                <p class="text-gray-600">Sign in to your account</p>
+            </div>
+
+            <!-- Error Message -->
+            <div v-if="errorMessage" class="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
+                {{ errorMessage }}
+            </div>
+
+            <!-- Success Message -->
+            <div v-if="successMessage" class="mb-4 p-3 bg-green-50 border border-green-200 text-green-700 rounded-lg text-sm">
+                {{ successMessage }}
+            </div>
+
+            <!-- Login Form -->
+            <form @submit.prevent="handleLogin" class="space-y-6">
+                <!-- Email Field -->
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+                        Email Address
+                    </label>
+                    <input
+                        id="email"
+                        v-model="email"
+                        type="email"
+                        required
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
+                        placeholder="Enter your email"
+                    >
+                </div>
+
+                <!-- Password Field -->
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+                        Password
+                    </label>
+                    <input
+                        id="password"
+                        v-model="password"
+                        type="password"
+                        required
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
+                        placeholder="Enter your password"
+                    >
+                </div>
+
+                <!-- Submit Button -->
+                <button
+                    type="submit"
+                    :disabled="loading"
+                    class="w-full bg-indigo-600 text-white py-3 rounded-lg font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                    <span v-if="!loading">Sign In</span>
+                    <span v-else>Signing In...</span>
+                </button>
+            </form>
+
+            <!-- Sign Up Link -->
+            <div class="mt-6 text-center">
+                <p class="text-sm text-gray-600">
+                    Don't have an account?
+                    <a href="#" @click.prevent="showSignUp = true" class="text-indigo-600 hover:text-indigo-700 font-medium">
+                        Sign up
+                    </a>
+                </p>
+            </div>
+
+            <!-- Sign Up Form (Hidden by default) -->
+            <div v-if="showSignUp" class="mt-6 pt-6 border-t border-gray-200">
+                <h2 class="text-xl font-bold text-gray-800 mb-4 text-center">Create Account</h2>
+                <form @submit.prevent="handleSignUp" class="space-y-6">
+                    <div>
+                        <label for="signup-email" class="block text-sm font-medium text-gray-700 mb-2">
+                            Email Address
+                        </label>
+                        <input
+                            id="signup-email"
+                            v-model="signUpEmail"
+                            type="email"
+                            required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
+                            placeholder="Enter your email"
+                        >
+                    </div>
+
+                    <div>
+                        <label for="signup-password" class="block text-sm font-medium text-gray-700 mb-2">
+                            Password
+                        </label>
+                        <input
+                            id="signup-password"
+                            v-model="signUpPassword"
+                            type="password"
+                            required
+                            minlength="6"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
+                            placeholder="Create a password (min. 6 characters)"
+                        >
+                    </div>
+
+                    <button
+                        type="submit"
+                        :disabled="loading"
+                        class="w-full bg-green-600 text-white py-3 rounded-lg font-medium hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        <span v-if="!loading">Create Account</span>
+                        <span v-else>Creating Account...</span>
+                    </button>
+
+                    <button
+                        type="button"
+                        @click="showSignUp = false"
+                        class="w-full text-gray-600 py-2 text-sm hover:text-gray-800"
+                    >
+                        Back to Login
+                    </button>
+                </form>
+            </div>
+
+            <!-- Logged In State -->
+            <div v-if="user" class="mt-6 pt-6 border-t border-gray-200 text-center">
+                <p class="text-green-600 font-medium mb-2">✓ Successfully logged in!</p>
+                <p class="text-sm text-gray-600 mb-4">Email: {{ user.email }}</p>
+                <button
+                    @click="handleLogout"
+                    class="text-indigo-600 hover:text-indigo-700 font-medium text-sm"
+                >
+                    Logout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    // Supabase credentials - REPLACE WITH YOUR OWN
+                    supabaseUrl: 'https://gspkniekncknvwhqtkos.supabase.co',
+                    supabaseKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdzcGtuaWVrbmNrbnZ3aHF0a29zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE4NzAzOTUsImV4cCI6MjA3NzQ0NjM5NX0.Usj48QMrH3ed0ProelrQSXqBdt4Z1kDtlAtC-8Rb5vQ',
+                    supabase: null,
+                    
+                    // Form data
+                    email: '',
+                    password: '',
+                    signUpEmail: '',
+                    signUpPassword: '',
+                    
+                    // UI state
+                    loading: false,
+                    errorMessage: '',
+                    successMessage: '',
+                    showSignUp: false,
+                    user: null
+                };
+            },
+            mounted() {
+                // Wait for Supabase to be available
+                if (typeof supabase === 'undefined' || !supabase.createClient) {
+                    this.errorMessage = 'Supabase library failed to load. Please check your internet connection and refresh the page.';
+                    console.error('Supabase library not available');
+                    return;
+                }
+                
+                // Initialize Supabase client
+                if (!this.supabaseUrl || !this.supabaseKey || this.supabaseUrl === 'YOUR_SUPABASE_URL' || this.supabaseKey === 'YOUR_SUPABASE_ANON_KEY') {
+                    this.errorMessage = 'Please configure Supabase credentials in login.html';
+                    return;
+                }
+                
+                try {
+                    this.supabase = supabase.createClient(this.supabaseUrl, this.supabaseKey);
+                    if (!this.supabase) {
+                        throw new Error('Failed to create Supabase client');
+                    }
+                } catch (error) {
+                    this.errorMessage = 'Failed to initialize Supabase: ' + error.message;
+                    console.error('Supabase initialization error:', error);
+                    return;
+                }
+                
+                // Check if user is already logged in
+                this.checkSession();
+            },
+            methods: {
+                async checkSession() {
+                    if (!this.supabase) {
+                        return;
+                    }
+                    
+                    try {
+                        const { data: { session } } = await this.supabase.auth.getSession();
+                        if (session) {
+                            this.user = session.user;
+                            this.successMessage = 'You are already logged in!';
+                        }
+                    } catch (error) {
+                        console.error('Error checking session:', error);
+                    }
+                },
+                
+                async handleLogin() {
+                    if (!this.supabase) {
+                        this.errorMessage = 'Supabase is not initialized. Please refresh the page.';
+                        return;
+                    }
+                    
+                    this.loading = true;
+                    this.errorMessage = '';
+                    this.successMessage = '';
+                    
+                    try {
+                        const { data, error } = await this.supabase.auth.signInWithPassword({
+                            email: this.email,
+                            password: this.password
+                        });
+                        
+                        if (error) throw error;
+                        
+                        this.user = data.user;
+                        this.successMessage = 'Login successful!';
+                        this.email = '';
+                        this.password = '';
+                    } catch (error) {
+                        this.errorMessage = error.message || 'An error occurred during login';
+                    } finally {
+                        this.loading = false;
+                    }
+                },
+                
+                async handleSignUp() {
+                    if (!this.supabase) {
+                        this.errorMessage = 'Supabase is not initialized. Please refresh the page.';
+                        return;
+                    }
+                    
+                    this.loading = true;
+                    this.errorMessage = '';
+                    this.successMessage = '';
+                    
+                    try {
+                        const { data, error } = await this.supabase.auth.signUp({
+                            email: this.signUpEmail,
+                            password: this.signUpPassword
+                        });
+                        
+                        if (error) throw error;
+                        
+                        this.successMessage = 'Account created! Please check your email to verify your account.';
+                        this.signUpEmail = '';
+                        this.signUpPassword = '';
+                        this.showSignUp = false;
+                    } catch (error) {
+                        this.errorMessage = error.message || 'An error occurred during sign up';
+                    } finally {
+                        this.loading = false;
+                    }
+                },
+                
+                async handleLogout() {
+                    if (!this.supabase) {
+                        this.errorMessage = 'Supabase is not initialized. Please refresh the page.';
+                        return;
+                    }
+                    
+                    this.loading = true;
+                    this.errorMessage = '';
+                    this.successMessage = '';
+                    
+                    try {
+                        const { error } = await this.supabase.auth.signOut();
+                        if (error) throw error;
+                        
+                        this.user = null;
+                        this.successMessage = 'You have been logged out successfully.';
+                    } catch (error) {
+                        this.errorMessage = error.message || 'An error occurred during logout';
+                    } finally {
+                        this.loading = false;
+                    }
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
