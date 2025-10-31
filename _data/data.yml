@@ -214,6 +214,10 @@ projectsweb:
         link: "/AdminDashboard"
         tagline: "A fully functional admin dashboard built with Vue.js and Tailwind CSS. Features real-time sorting, filtering, modal edits, analytics charts, and complete CRUD operations with mock data that behaves like a real database."
 
+      - title: Authentication System (Full Stack)
+        link: "/login.html"
+        tagline: "A production-ready authentication system showcasing full-stack development. Built with Vue.js and Tailwind CSS for the frontend, integrated with Supabase as the backend-as-a-service for secure user authentication. Features include user registration, login, session management, and error handling. Demonstrates ability to work with modern frontend frameworks and cloud-based backend services."
+
 skills:
     title: Skills &amp; Proficiency
 
