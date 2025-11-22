@@ -1,23 +1,23 @@
-{% assign projectsmobile = site.data.data.projectsmobile %}
-{% if projectsmobile %}
-<section class="section projectsmobile-section">
+{% assign projectspc = site.data.data.projectspc %}
+{% if projectspc %}
+<section class="section projectspc-section">
 
   <h2 class="section-title">
     <span class="fa-stack fa-xs">
       <i class="fas fa-circle fa-stack-2x"></i>
       <i class="fas fa-archive fa-stack-1x fa-inverse"></i>
     </span>
-    {{ projectsmobile.title }}
+    {{ projectspc.title }}
   </h2>
 
-  {% if projectsmobile.intro %}
+  {% if projectspc.intro %}
   <div class="intro">
-      <p>{{ projectsmobile.intro }}</p>
+      <p>{{ projectspc.intro }}</p>
   </div><!--//intro-->
   {% endif %}
 
   <div class="projects-container">
-    {% for project in projectsmobile.assignments %}
+    {% for project in projectspc.assignments %}
       <div class="project-card">
         {% if project.gif %}
         <div class="project-image-wrapper">
@@ -62,26 +62,26 @@
 </section><!--//section-->
 {% endif %}
 
-{% assign projectspc = site.data.data.projectspc %}
-{% if projectspc %}
-<section class="section projectspc-section">
+{% assign projectsmobile = site.data.data.projectsmobile %}
+{% if projectsmobile %}
+<section class="section projectsmobile-section">
 
   <h2 class="section-title">
     <span class="fa-stack fa-xs">
       <i class="fas fa-circle fa-stack-2x"></i>
       <i class="fas fa-archive fa-stack-1x fa-inverse"></i>
     </span>
-    {{ projectspc.title }}
+    {{ projectsmobile.title }}
   </h2>
 
-  {% if projectspc.intro %}
+  {% if projectsmobile.intro %}
   <div class="intro">
-      <p>{{ projectspc.intro }}</p>
+      <p>{{ projectsmobile.intro }}</p>
   </div><!--//intro-->
   {% endif %}
 
   <div class="projects-container">
-    {% for project in projectspc.assignments %}
+    {% for project in projectsmobile.assignments %}
       <div class="project-card">
         {% if project.gif %}
         <div class="project-image-wrapper">
